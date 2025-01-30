@@ -10,18 +10,18 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     // Validar si el nombre de usuario está vacío
     if (!username || username.trim() === '') {
       return res.status(400).json({
-        errors: { username: 'El nombre de usuario no puede estar vacío.' }
+        errors: { username: 'Nombre de usuario vacío.' }
       });
     }
     // Validar longitud del nombre de usuario
     if (username.length < 3) {
       return res.status(400).json({
-        errors: { username: 'El usuario debe tener al menos 3 caracteres.' }
+        errors: { username: 'Ingresa al menos 3 caracteres.' }
       });
     }
     if (username.length > 15) {
       return res.status(400).json({
-        errors: { username: 'El usuario no debe superar los 15 caracteres.' }
+        errors: { username: 'Sobrepasa los 15 caracteres.' }
       });
     }
 
@@ -34,24 +34,24 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     // Validar longitud de la contraseña
     if (password.length < 6) {
       return res.status(400).json({
-        errors: { password: 'La contraseña debe tener al menos 6 caracteres.' }
+        errors: { password: 'Ingresa al menos 6 caracteres.' }
       });
     }
     if (password.length > 20) {
       return res.status(400).json({
-        errors: { password: 'La contraseña no debe superar los 20 caracteres.' }
+        errors: { password: 'Sobrepasa los 20 caracteres.' }
       });
     }
     // Validar si la contraseña contiene al menos una mayúscula
     if (!/[A-Z]/.test(password)) {
       return res.status(400).json({
-        errors: { password: 'Ingresa al menos una mayúscula en la contraseña.' }
+        errors: { password: 'Ingresa al menos una mayúscula.' }
       });
     }
     // Validar si la contraseña contiene al menos un número
     if (!/[0-9]/.test(password)) {
       return res.status(400).json({
-        errors: { password: 'La contraseña debe contener al menos un número.' }
+        errors: { password: 'Ingresa al menos un número.' }
       });
     }
 
@@ -79,7 +79,6 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     const token = jwt.sign(
       { id: user.id, username: user.username },
       process.env.JWT_SECRET || 'secretkey',
-      { expiresIn: '1h' }
     );
 
     return res.status(201).json({ message: 'Usuario registrado con éxito', token, user });

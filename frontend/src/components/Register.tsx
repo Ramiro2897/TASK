@@ -16,9 +16,10 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage('');
-  
+    const API_URL = import.meta.env.VITE_API_URL;
+
     try {
-       await axios.post('http://localhost:3000/api/auth/register', {
+       await axios.post(`${API_URL}/api/auth/register`, {
         username,
         password,
       });
@@ -71,9 +72,6 @@ const Register: React.FC = () => {
 
         <div className="register-link">
           <p>¿Ya tienes cuenta? <a href="/">Inicia sesión</a></p>
-        </div>
-        <div className="footer">
-          <p>&copy; 2025 Tasly. Todos los derechos reservados.</p>
         </div>
       </form>
     </div>

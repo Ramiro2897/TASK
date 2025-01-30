@@ -31,9 +31,11 @@ const Login: React.FC = () => {
       return; // Evita que el formulario se envíe si hay errores
     }
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     try {
       // Realizamos la solicitud POST con axios
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
         username,
         password,
       });
@@ -41,6 +43,7 @@ const Login: React.FC = () => {
       // Si la respuesta es exitosa, guardamos el token en el localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('username', response.data.user.username);
 
       console.log('Login exitoso:', response.data);
       setMessage('Inicio de sesión exitoso. Redirigiendo...');
@@ -103,9 +106,6 @@ const Login: React.FC = () => {
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faTwitter} />
           </a>
-        </div>
-        <div className="footer">
-          <p>&copy; 2025 Tasly. Todos los derechos reservados.</p>
         </div>
       </form>
     </div>

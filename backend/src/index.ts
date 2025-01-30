@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 import { Pool } from 'pg';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes';  
+import { verifyToken } from './middleware/verifyToken';
+// import { verifyToken } from './middleware/verifyToken';
+
 
 dotenv.config();
 
@@ -49,7 +52,15 @@ app.get('/', async (_req: Request, res: Response) => {
 // Rutas de autenticación
 app.use('/api/auth', authRoutes);
 
-// Iniciar el servidor
-app.listen(port, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
+app.get('/Consulta', verifyToken, (req, res) => {
+  console.log('Hola, llegaste a /Home');
+  res.send('Bienvenido al endpoint protegido');
 });
+
+
+
+// Iniciar el servidor
+app.listen(3000, '0.0.0.0', () => {
+  console.log('🚀 Servidor backend corriendo en http://0.0.0.0:3000');
+});
+
