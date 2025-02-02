@@ -2,6 +2,13 @@
 import express, { Request, Response } from 'express';
 import { register } from '../controllers/registerController';
 import { login } from '../controllers/authController';
+import { verifyToken } from '../middleware/verifyToken';
+import { createTask } from '../controllers/taskController';
+import { createPhrase } from '../controllers/phrasesController';
+import { createGoal } from '../controllers/goalController';
+
+
+
 
 const router = express.Router();
 
@@ -22,6 +29,26 @@ router.post('/logout', (req: Request, res: Response) => {
 
   // Solo respondemos que la sesión fue cerrada
   res.status(200).json({ message: 'Sesión cerrada exitosamente' });
+});
+
+// Ruta para la creación de tareas (se añade dentro de authRoutes)
+router.post('/task', verifyToken, async (req, res) => {
+  console.log('paso por aqui');
+  await createTask(req, res); 
+});
+
+// Ruta para la creación de tareas (se añade dentro de authRoutes)
+router.post('/phrase', verifyToken, async (req, res) => {
+  console.log('entro aqui al crear la frase');
+  await createPhrase(req, res);
+});
+
+// ruta para la creacion de metas...
+router.post('/goals', verifyToken, async (req, res) => {
+  console.log('entro aqui al crear una meta');
+  await createGoal(req, res);
+
+  // await createPhrase(req, res);
 });
 
 
