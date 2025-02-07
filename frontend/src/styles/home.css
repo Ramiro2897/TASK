@@ -157,7 +157,7 @@ body::before {
 /* Contenedor de lista */
 .list-container {
   min-height: 100px;
-  padding: 15px; /* Más padding para mejor espaciado */
+  padding: 10px; /* Más padding para mejor espaciado */
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.05);
   cursor: pointer;
@@ -168,11 +168,178 @@ body::before {
 }
 
 .empty-text {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ccc;
   font-style: italic;
   margin: 10px 0; 
   text-align: center;
+  font-size: .9rem;
 }
+
+/* Estilos para tareas, frases y metas en el home */
+.task-text {
+  width: 100%;
+  color: #ccc;
+  font-size: 0.8rem;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 10px 0;
+  text-align: left;
+  background: linear-gradient(45deg, rgba(59, 57, 57, 0.1), rgba(44, 44, 44, 0.1), rgba(59, 57, 57, 0.4)); /* Fondo con degradado */
+  padding: 10px 10px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+.task-text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="1" fill="white" opacity="0.5" /%3E%3C/svg%3E') repeat;
+  pointer-events: none; /* Esto asegura que no interfiera con los clics */
+  animation: starfall 2s linear infinite;
+  z-index: -1; /* Asegura que las estrellas estén en el fondo */
+}
+
+@keyframes starfall {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100px 100px;
+  }
+}
+
+.title-name {
+  color: #ccc;
+  font-size: .9rem;
+  font-weight: bold;
+  text-transform: capitalize; 
+}
+
+.alert-red {
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    background-color: rgba(133, 78, 78, 0.4); 
+  }
+  100% {
+    background-color: rgba(134, 79, 79, 0.15); 
+  }
+}
+
+.card-notification.closing {
+  animation: slideUp 0.5s ease-in forwards; /* Animación de deslizamiento hacia arriba */
+}
+
+@keyframes slideUp {
+  0% {
+    top: 20px; /* Empieza desde la posición visible */
+  }
+  100% {
+    top: -100px; /* Se va fuera de la pantalla */
+  }
+}
+
+/* Estilos para los nuevos elementos */
+.task-status {
+  margin-top: 8px;
+  font-size: 0.8rem;
+}
+
+.complete-status {
+  color: #fff;
+  padding: 4px 10px;
+  background-color: #04D939;
+  border-radius: 2px;
+  margin-top: 8px;
+}
+
+.incomplete-status {
+  color: #ccc;
+  padding: 4px 10px;
+  background-color: #58929c;
+  border-radius: 2px;
+  margin-top: 8px;
+}
+
+.task-date {
+  margin-top: 8px;
+  padding: 3px 0px;
+  font-size: 0.8rem;
+  font-weight: 100;
+  color: #ccc;
+}
+/* ------------- tareas diarias -------------- */
+
+.author-info{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 2px 0px;
+  margin-top: 0px;
+  font-size: 1rem;
+  color: #40914b;
+}
+
+.content-author{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: px;
+  font-size: 0.8rem;
+  font-weight: 100;
+  color: #ccc;
+}
+
+.author{
+  color: #ccc;
+  padding: 1px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(141, 135, 135, 0.3);
+}
+
+.favorite-icon {
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Corazón favorito (rojo) con animación de latido */
+.favorite-icon.favorite {
+  color: #ff6b6b;
+  animation: heartbeat 10s infinite alternate;
+}
+
+/* Corazón no favorito (gris) */
+.favorite-icon.not-favorite {
+  color: #ccc;
+}
+
+/* Animación de latido */
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ------------- frases o diario -------------- */
+.goals-unit {
+  display: inline-block; /* Se ajusta al contenido */
+  min-width: 30%; 
+  max-width: 100%; 
+  color: #ccc;
+  padding: 1px 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(141, 135, 135, 0.3);
+  margin-top: 4px;
+  background-color: #58929c;
+  word-wrap: break-word; /* Evita que el texto desborde */
+}
+
 
 /* Botón de agregar */
 .add-button {
@@ -221,6 +388,73 @@ body::before {
   animation: wave 2s ease-in-out 1;
 }
 
+/* recibir errores del servidor */
+.errors{
+  width: 100%;
+  padding: 3px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ------------notificacion de tareas pendientes-------- */
+.card-notification{
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  min-width: max-content;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 2px;
+  animation: slideDown 0.5s ease-out forwards;
+  border: 2px solid rgba(134, 79, 79, 0.15);
+}
+
+@keyframes slideDown {
+  0% {
+    top: -100px; /* Comienza fuera de la pantalla, hacia arriba */
+  }
+  100% {
+    top: 20px; /* Termina en la posición donde está en tu CSS */
+  }
+}
+
+.icon{
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(45deg, rgba(59, 57, 57, 0.1), rgba(44, 44, 44, 0.2), rgba(59, 57, 57, 0.7)); /* Fondo con degradado */
+  border-radius: 10px;
+}
+
+.message-text {
+  padding: 5px 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #ccc;
+}
+
+.sub-text {
+  padding: 5px 14px;
+  font-size: 0.8rem;
+  font-weight: 100;
+  color: #fff;
+}
+
+.alert-icon{
+  padding: 4px;
+  border-radius: 5px;
+  color: #ff6b6b;
+}
 
 @media (max-width: 600px) {
   .card {
@@ -240,3 +474,4 @@ body::before {
     font-size: 0.9rem; /* Tamaño de fuente más pequeño */
   }
 }
+

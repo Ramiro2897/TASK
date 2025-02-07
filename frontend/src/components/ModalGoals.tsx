@@ -6,9 +6,10 @@ interface ModalGoalsProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (goalData: { goal: string; description: string; startDate: string; endDate: string; unit: string }) => void;
+  onGoalsAdded: (goalData: any) => void;
 }
 
-const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit }) => {
+const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit, onGoalsAdded}) => {
   const [goal, setGoal] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -31,14 +32,16 @@ const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit }) =>
     const API_URL = import.meta.env.VITE_API_URL;
 
     try {
-      await axios.post(`${API_URL}/api/auth/goals`, goalData, {
+     const response = await axios.post(`${API_URL}/api/auth/goals`, goalData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       onSubmit(goalData);
+      onGoalsAdded(response.data);
+
       setGoal("");
       setDescription("");
       setStartDate("");
@@ -52,7 +55,6 @@ const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit }) =>
         onClose();
       }, 5000);
     } catch (error: any) {
-      console.log('Error:', error);
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
       } else {

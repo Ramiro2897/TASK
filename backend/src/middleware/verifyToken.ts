@@ -7,7 +7,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
     console.log('No mando el token'); // Para pruebas
     return; // Terminar la ejecución del middleware
   }
-  console.log('Token recibido xdxd:', token); // Para pruebas
+  // console.log('Token recibido xdxd:', token); // Para pruebas
   next(); // Continuar al siguiente middleware si todo está bien
 };
 

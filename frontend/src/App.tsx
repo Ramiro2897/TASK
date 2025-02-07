@@ -3,6 +3,7 @@ import './styles/global.css';
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
+import Task from './components/Task';
 import ProtectedRoute from './components/ProtectedRoute';
 import RedirectIfAuthenticated from './components/Redirect';
 import RedirectRegister from './components/redirectRegister';
@@ -20,8 +21,11 @@ function App() {
           <Route path="/register" element={<RedirectRegister><Register /></RedirectRegister>} />
 
           {/* Ruta protegida para el home, solo accesible si hay un token */}
-
           <Route path="/Home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+
+          {/* Ruta protegida para el task, solo accesible si hay un token */}
+          <Route path="/tasks" element={<ProtectedRoute><Task /></ProtectedRoute>} />
+          
         </Routes>
       </div>
     </Router>

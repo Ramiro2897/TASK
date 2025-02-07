@@ -6,8 +6,9 @@ import { verifyToken } from '../middleware/verifyToken';
 import { createTask } from '../controllers/taskController';
 import { createPhrase } from '../controllers/phrasesController';
 import { createGoal } from '../controllers/goalController';
-
-
+import { getTasks } from '../controllers/getTaskController';
+import { getPhrases } from '../controllers/getPhrasesController';
+import { getGoals } from '../controllers/getGoalsController';
 
 
 const router = express.Router();
@@ -47,11 +48,26 @@ router.post('/phrase', verifyToken, async (req, res) => {
 router.post('/goals', verifyToken, async (req, res) => {
   console.log('entro aqui al crear una meta');
   await createGoal(req, res);
-
   // await createPhrase(req, res);
 });
 
+// ruta para hacer la consulta a las tareas de dicho usuario
+router.get('/tasklist', verifyToken, async (req, res) => {
+  // console.log('entro aqui al hacer la consulta de las tareas...');
+  await getTasks(req, res); // Llamamos al controlador que obtiene las tareas
+});
 
+// ruta para hacer la consulta a las tareas de dicho usuario
+router.get('/phraseslist', verifyToken, async (req, res) => {
+  // console.log('entro aqui al hacer la consulta de las frases...');
+  await getPhrases(req, res); // Llamamos al controlador que obtiene las tareas
+});
+
+// ruta para hacer la consulta a las metas de dicho usuario
+router.get('/goallist', verifyToken, async (req, res) => {
+  // console.log('entro aqui al hacer la consulta de las Metas...');
+  await getGoals(req, res); // Llamamos al controlador que obtiene las tareas
+});
 
 export default router;
 

@@ -6,9 +6,10 @@ interface ModalTaskProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (taskData: { task: string; startDate: string; endDate: string; category: string; priority: string }) => void;
+  onTaskAdded: (taskData: any) => void;
 }
 
-const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit }) => {
+const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit, onTaskAdded }) => {
   const [task, setTask] = useState(""); // Nombre de la tarea
   const [startDate, setStartDate] = useState(""); // Fecha de inicio
   const [endDate, setEndDate] = useState(""); // Fecha de finalización
@@ -24,7 +25,6 @@ const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit }) => {
 
       const user = localStorage.getItem('user');
       const userId = user ? JSON.parse(user).id : ''; 
-      console.log(userId, 'aqui esta el id...');
       // Crear el objeto con los datos
       const taskData = { task, startDate, endDate, category, priority, userId };
 
@@ -35,10 +35,9 @@ const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit }) => {
       }
 
       const API_URL = import.meta.env.VITE_API_URL;
-      console.log('taskData que se enviará:', taskData);
 
       try {
-         await axios.post(`${API_URL}/api/auth/task`, taskData, {
+       const response =   await axios.post(`${API_URL}/api/auth/task`, taskData, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -47,6 +46,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit }) => {
 
         // Llamar a la función onSubmit para que el padre reciba los datos
         onSubmit(taskData);
+        onTaskAdded(response.data);
 
         // Limpiar los campos después de enviar
         setTask("");
@@ -54,7 +54,6 @@ const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit }) => {
         setEndDate("");
         setCategory("");
         setPriority("medium");
-
         setSuccessMessage("La tarea se agregó!");
         // Limpiar los errores
         setErrors({});
@@ -64,8 +63,6 @@ const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit }) => {
         }, 5000);
 
       } catch (error: any) {
-        console.log('Error:', error); 
-      
         // Manejo de errores específicos de la respuesta del backend
         if (error.response?.data?.errors) {
           setErrors(error.response.data.errors); // Mostrar errores específicos

@@ -6,9 +6,10 @@ interface ModalPhrasesProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (phraseData: { phrase: string; author: string }) => void;
+  onPhrasesAdded: (phaseData: any) => void;
 }
 
-const ModalPhrases: React.FC<ModalPhrasesProps> = ({ isOpen, onClose, onSubmit }) => {
+const ModalPhrases: React.FC<ModalPhrasesProps> = ({ isOpen, onClose, onSubmit,  onPhrasesAdded}) => {
   const [phrase, setPhrase] = useState("");
   const [author, setAuthor] = useState("");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -20,7 +21,6 @@ const ModalPhrases: React.FC<ModalPhrasesProps> = ({ isOpen, onClose, onSubmit }
     
     const user = localStorage.getItem('user');
     const userId = user ? JSON.parse(user).id : ''; 
-    console.log(userId, 'aquí está el ID de frases...');
 
     const phraseData = { phrase, author, userId };
     
@@ -30,12 +30,14 @@ const ModalPhrases: React.FC<ModalPhrasesProps> = ({ isOpen, onClose, onSubmit }
     const API_URL = import.meta.env.VITE_API_URL;
     
     try {
-      await axios.post(`${API_URL}/api/auth/phrase`, phraseData, {
+      const response = await axios.post(`${API_URL}/api/auth/phrase`, phraseData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
+
+      onPhrasesAdded(response.data);
       
       onSubmit(phraseData);
       setPhrase("");
@@ -47,7 +49,6 @@ const ModalPhrases: React.FC<ModalPhrasesProps> = ({ isOpen, onClose, onSubmit }
         onClose();
       }, 5000);
     } catch (error: any) {
-      console.log('Error:', error);
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
       } else {
