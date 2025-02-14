@@ -29,7 +29,6 @@ const Task = () => {
           },
         });
         setTasks(response.data);
-        console.log(response.data, 'tareas...')
       } catch (error: any) {
         console.error("Error al obtener las tareas:", error);
         if (error.response?.data.errors) {
@@ -85,13 +84,59 @@ const Task = () => {
   // Función para obtener los valores de la prioridad
   const getPriorityData = (priority: string) => priorityMap[priority];
 
-  // llevar a home
+  // llevar a home -- boton de ir a home
     const navigate = useNavigate();
-  
     const handleGoHome = () => {
       navigate("/Home"); // Navega a la página Home
     };
+
+
+  // Datos blobales del usuario para realizar acciones
+  const user = localStorage.getItem("user");
+  const userId = user ? JSON.parse(user).id : "";
+  const token = localStorage.getItem("token");
+
+  // funcion para actualizar las tareas a completa o viceversa
+  const handleCheckboxChange = async (taskId: number, isChecked: boolean) => {
+    try {
+      console.log('datosss', userId, token, taskId, isChecked)
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.put(`${API_URL}/api/auth/updateTask`, 
+        { complete: isChecked }, // Enviamos el nuevo estado de "complete"
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "User-Id": userId,  
+            "Task-Id": taskId, 
+            "Complete": isChecked.toString()   
+          }
+        }
+      );
   
+      setTasks(prevTasks => prevTasks.map(task =>
+        task.id === taskId ? { ...task, complete: isChecked } : task
+      ));
+
+      // noticacion de audio
+      const playSound = () => {
+        const audio = new Audio('/public/complete.mp3'); // Ruta del audio en tu proyecto
+        audio.volume = 0.3;
+        audio.play();
+      };
+      playSound();
+  
+      console.log(`✅ Tarea ${taskId} actualizada a ${isChecked ? 'completada' : 'pendiente'}`);
+    } catch (error: any) {
+      setErrors(error.response?.data?.errors || { general: 'Error en la búsqueda.' }); 
+      setTimeout(() => {
+        setErrors((prevErrors) => ({ ...prevErrors, general: '' })); 
+      }, 5000);
+    }
+  };
+  
+  
+
+
 
   return (
 
@@ -145,9 +190,41 @@ const Task = () => {
                   className={styles['custom-checkbox']} 
                   id={`task-${task.id}`} 
                   defaultChecked={task.complete} 
+                  onChange={(e) => handleCheckboxChange(task.id, e.target.checked)} 
                 />
                 <label htmlFor={`task-${task.id}`} className={styles['checkbox-label']}></label>
-              <p>{task.task_name} - <span>ID: {task.id}</span></p>
+
+                <div className={styles['content-infoTask']}>
+                  <div className={styles['task-name']}>
+                    <p>{task.task_name}</p>
+                    <div className={`${styles['task-priority']} ${getPriorityData(task.priority).className}`}>
+                      {getPriorityData(task.priority).label}
+                    </div>
+                  </div>
+                  <div className={styles['task-category']}>
+                    <p>{task.category}</p> 
+                  </div>
+                  <div className={styles['task-date']}>
+                    <div className={styles['content-date']}>
+                      <p title="fecha de inicio">
+                        <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
+                        {new Date(task.created_at).toLocaleDateString('es-ES', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                        }).replace('.', '')}
+                      </p>
+                      <p title="fecha final">
+                        <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
+                        {new Date(task.end_date).toLocaleDateString('es-ES', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                        }).replace('.', '')}
+                      </p>
+                    </div>
+                  </div>
+                </div>   
             </div>
             ))
           : tasks.length > 0 &&
@@ -158,10 +235,11 @@ const Task = () => {
                   className={styles['custom-checkbox']} 
                   id={`task-${task.id}`} 
                   defaultChecked={task.complete} 
+                  onChange={(e) => handleCheckboxChange(task.id, e.target.checked)} 
                 />
                 <label htmlFor={`task-${task.id}`} className={styles['checkbox-label']}></label>
+
                 <div className={styles['content-infoTask']}>
-                  
                   <div className={styles['task-name']}>
                     <p>{task.task_name}</p>
                     <div className={`${styles['task-priority']} ${getPriorityData(task.priority).className}`}>

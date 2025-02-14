@@ -6,15 +6,14 @@
 
 body{
   width: 100%;
-  height: auto;
-  position: relative;
-  overflow-y: auto;
+  height: 100%;
+  overflow: auto;
 }
 
 /* contenedor en de todo el contenido de tareas */
 .task-container{
   width: 100%;
-  height: auto; 
+  height: 100vh; 
   /* border: 1px solid yellow; */
 }
 
@@ -346,7 +345,25 @@ body{
   color: #bbb;
 }
 
+/* estilos para la barra de scroll */
+::-webkit-scrollbar {
+  width: 10px;
+}
 
+::-webkit-scrollbar-track {
+  background: #034159;
+  backdrop-filter: blur(5px); /* Efecto de vidrio */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #998d8d28;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #58929c;
+}
 
 
 /* media queries pantallas inferiores a 768px */

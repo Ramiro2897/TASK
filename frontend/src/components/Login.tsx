@@ -3,7 +3,7 @@ import styles from '../styles/login.module.css';
 // import '../styles/Login.css';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faInstagram, faWhatsapp, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { validateLoginUsername, validateLoginPassword } from '../utils/validations';
 import axios from 'axios';
 
@@ -102,10 +102,10 @@ const Login: React.FC = () => {
             <FontAwesomeIcon icon={faInstagram} />
           </a>
           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faFacebook} />
+            <FontAwesomeIcon icon={faWhatsapp} />
           </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faTwitter} />
+          <a href="https://github.com/Ramiro2897" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faGithub} />
           </a>
         </div>
       </form>

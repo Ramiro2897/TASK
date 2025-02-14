@@ -11,6 +11,8 @@ import { getPhrases } from '../controllers/getPhrasesController';
 import { getGoals } from '../controllers/getGoalsController';
 import { getUserTasks } from '../controllers/getUserTaskController';
 import { searchTasks } from '../controllers/searchTasks';
+import { updateTaskStatus } from '../controllers/updateTaskStatus';
+
 
 
 
@@ -82,7 +84,10 @@ router.get('/searchTasks', verifyToken, async (req, res) => {
   await searchTasks(req, res); // Llamamos al controlador que obtiene las tareas
 });
 
-
+// Ruta para actualizar el estado de la tarea (completa o pendiente)
+router.put('/updateTask', verifyToken, async (req, res) => {
+  await updateTaskStatus(req, res); // Llamamos al controlador para actualizar el estado
+});
 
 
 
