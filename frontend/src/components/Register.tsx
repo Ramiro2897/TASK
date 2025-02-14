@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../styles/Login.css';
+import styles from '../styles/login.module.css';
 import { useNavigate } from 'react-router-dom';
 
 // import { validateUsername, validatePassword } from '../utils/validations';
@@ -40,13 +40,13 @@ const Register: React.FC = () => {
   };
   
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
+    <div className={styles['login-container']}>
+      <form className={styles['login-form']} onSubmit={handleSubmit}>
         <h2>TASLY</h2>
-
-        {message && <p className="message">{message}</p>}
-        
-        <div className="input-group">
+  
+        {message && <p className={styles.message}>{message}</p>}
+  
+        <div className={styles['input-group']}>
           <label>Usuario</label>
           <input
             type="text"
@@ -54,10 +54,10 @@ const Register: React.FC = () => {
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Crea un usuario"
           />
-           {errors.username && <p className="error">{errors.username}</p>} 
+          {errors.username && <p className={styles.error}>{errors.username}</p>}
         </div>
-
-        <div className="input-group">
+  
+        <div className={styles['input-group']}>
           <label>Contraseña</label>
           <input
             type="password"
@@ -65,17 +65,18 @@ const Register: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Crea una contraseña"
           />
-           {errors.password && <p className="error">{errors.password}</p>} 
+          {errors.password && <p className={styles.error}>{errors.password}</p>}
         </div>
-
+  
         <button type="submit">Registrarse</button>
-
-        <div className="register-link">
+  
+        <div className={styles['register-link']}>
           <p>¿Ya tienes cuenta? <a href="/">Inicia sesión</a></p>
         </div>
       </form>
     </div>
   );
+  
 };
 
 export default Register;

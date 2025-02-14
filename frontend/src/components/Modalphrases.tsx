@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import '../styles/modalTask.css';
+import styles from '../styles/modalTask.module.css';
+
 
 interface ModalPhrasesProps {
   isOpen: boolean;
@@ -70,30 +71,30 @@ const ModalPhrases: React.FC<ModalPhrasesProps> = ({ isOpen, onClose, onSubmit, 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className={styles['modal-overlay']}>
+      <div className={styles['modal-content']}>
         <h2>Agregar Frase</h2>
-        {successMessage && <div className="success-message">{successMessage}</div>}
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-
+        {successMessage && <div className={styles['success-message']}>{successMessage}</div>}
+        {errorMessage && <div className={styles['error-message']}>{errorMessage}</div>}
+  
         <form onSubmit={handleSubmit}>
-          {errors.phrase && <div className="errorContainer"><span className="errorTask">{errors.phrase}</span></div>}
+          {errors.phrase && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.phrase}</span></div>}
           <input
             type="text"
             placeholder="Escribe una frase"
             value={phrase}
             onChange={(e) => setPhrase(e.target.value)}
           />
-
-          {errors.author && <div className="errorContainer"><span className="errorTask">{errors.author}</span></div>}
+  
+          {errors.author && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.author}</span></div>}
           <input
             type="text"
             placeholder="Autor"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
           />
-
-          <div className="modal-actions">
+  
+          <div className={styles['modal-actions']}>
             <button type="submit">Guardar</button>
             <button type="button" onClick={handleClose}>Cerrar</button>
           </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import '../styles/modalTask.css';
+import styles from '../styles/modalTask.module.css';
+
 
 interface ModalGoalsProps {
   isOpen: boolean;
@@ -79,31 +80,32 @@ const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit, onGo
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className={styles['modal-overlay']}>
+      <div className={styles['modal-content']}>
         <h2>Agregar Meta</h2>
-        {successMessage && <div className="success-message">{successMessage}</div>}
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-
+        {successMessage && <div className={styles['success-message']}>{successMessage}</div>}
+        {errorMessage && <div className={styles['error-message']}>{errorMessage}</div>}
+  
         <form onSubmit={handleSubmit}>
-          {errors.goal && <div className="errorContainer"><span className="errorTask">{errors.goal}</span></div>}
+          {errors.goal && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.goal}</span></div>}
           <input
             type="text"
             placeholder="Escribe tu meta"
             value={goal}
             onChange={(e) => setGoal(e.target.value)}
           />
-
-          {errors.description && <div className="errorContainer"><span className="errorTask">{errors.description}</span></div>}
+  
+          {errors.description && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.description}</span></div>}
           <input
             type="text"
             placeholder="Descripción"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          {errors.date && <div className="errorContainer"><span className="errorTask">{errors.date}</span></div>}
-
-          <div className="starDate">
+          
+          {errors.date && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.date}</span></div>}
+  
+          <div className={styles['starDate']}>
             <label htmlFor="startDate">Fecha de inicio:</label>
             <input
               type="date"
@@ -111,8 +113,8 @@ const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit, onGo
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
-
-          <div className="starDate">
+  
+          <div className={styles['starDate']}>
             <label htmlFor="endDate">Fecha final:</label>
             <input
               type="date"
@@ -120,8 +122,8 @@ const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit, onGo
               onChange={(e) => setEndDate(e.target.value)}
             />
           </div>
-
-          {errors.unit && <div className="errorContainer"><span className="errorTask">{errors.unit}</span></div>}
+  
+          {errors.unit && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.unit}</span></div>}
           <select value={unit} onChange={(e) => setUnit(e.target.value)}>
             <option value="" disabled>Selecciona el tipo de objetivo...</option>
             <option value="tareas">Tareas</option>
@@ -145,8 +147,8 @@ const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit, onGo
             <option value="viajes">Viajes</option>
             <option value="otros">Otros</option>
           </select>
-
-          <div className="modal-actions">
+  
+          <div className={styles['modal-actions']}>
             <button type="submit">Guardar</button>
             <button type="button" onClick={handleClose}>Cerrar</button>
           </div>

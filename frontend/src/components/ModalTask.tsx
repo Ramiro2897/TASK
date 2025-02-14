@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import '../styles/modalTask.css';
+import styles from '../styles/modalTask.module.css';
+
 
 interface ModalTaskProps {
   isOpen: boolean;
@@ -94,64 +95,66 @@ const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit, onTask
 
   if (!isOpen) return null;
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Agregar Tarea</h2>
-        {successMessage && <div className="success-message">{successMessage}</div>}
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-        <form onSubmit={handleSubmit}>
-        {errors.task_name && <div className="errorContainer"><span className="errorTask">{errors.task_name}</span></div>}
-          <input
-            type="text"
-            placeholder="Escribe tu tarea"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-          />
+return (
+  <div className={styles['modal-overlay']}>
+    <div className={styles['modal-content']}>
+      <h2>Agregar Tarea</h2>
+      {successMessage && <div className={styles['success-message']}>{successMessage}</div>}
+      {errorMessage && <div className={styles['error-message']}>{errorMessage}</div>}
 
-        {errors.date && <div className="errorContainer"><span className="errorTask">{errors.date}</span></div>}
-        <div className="starDate">
+      <form onSubmit={handleSubmit}>
+        {errors.task_name && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.task_name}</span></div>}
+        <input
+          type="text"
+          placeholder="Escribe tu tarea"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+        />
+
+        {errors.date && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.date}</span></div>}
+        <div className={styles['starDate']}>
           <label htmlFor="startDate">Fecha de inicio:</label>
         </div>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        <div className="starDate">
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <div className={styles['starDate']}>
           <label htmlFor="endDate">Fecha final:</label>
         </div>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
 
-        {errors.category && <div className="errorContainer"><span className="errorTask">{errors.category}</span></div>}
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="">Selecciona una categoría</option>
-            <option value="personal">Personal</option>
-            <option value="trabajo">Trabajo</option>
-            <option value="urgente">Urgente</option>
-            <option value="otro">Otro</option>
-          </select>
+        {errors.category && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.category}</span></div>}
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option value="">Selecciona una categoría</option>
+          <option value="personal">Personal</option>
+          <option value="trabajo">Trabajo</option>
+          <option value="urgente">Urgente</option>
+          <option value="otro">Otro</option>
+        </select>
 
-          {errors.priority && <div className="errorContainer"><span className="errorTask">{errors.priority}</span></div>}
-          <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-            <option value="low">Baja</option>
-            <option value="medium">Media</option>
-            <option value="high">Alta</option>
-          </select>
+        {errors.priority && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.priority}</span></div>}
+        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+          <option value="low">Baja</option>
+          <option value="medium">Media</option>
+          <option value="high">Alta</option>
+        </select>
 
-          <div className="modal-actions">
-            <button type="submit">Guardar</button>
-            <button type="button" onClick={handleClose}>Cerrar</button>
-          </div>
-        </form>
-      </div>
+        <div className={styles['modal-actions']}>
+          <button type="submit">Guardar</button>
+          <button type="button" onClick={handleClose}>Cerrar</button>
+        </div>
+      </form>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default ModalTask;

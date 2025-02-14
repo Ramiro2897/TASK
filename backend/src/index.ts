@@ -3,8 +3,9 @@ import dotenv from 'dotenv';
 import { Pool } from 'pg';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes';  
-import { verifyToken } from './middleware/verifyToken';
-// import { verifyToken } from './middleware/verifyToken';
+import cron from 'node-cron';
+import archiveOldTasks from './controllers/taskArchiver';
+
 
 
 dotenv.config();
@@ -52,9 +53,10 @@ app.get('/', async (_req: Request, res: Response) => {
 // Rutas de autenticación
 app.use('/api/auth', authRoutes);
 
-app.get('/Consulta', verifyToken, (req, res) => {
-  console.log('Hola, llegaste a /Home');
-  res.send('Bienvenido al endpoint protegido');
+// Programamos el job para que se ejecute a las 00:00 horas del 7 de cada mes
+cron.schedule('0 0 7 * *', () => {
+  console.log('Ejecutando el job para archivar tareas...');
+  archiveOldTasks(); // Llamamos a la función que archiva las tareas
 });
 
 

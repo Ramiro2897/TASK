@@ -9,6 +9,9 @@ import { createGoal } from '../controllers/goalController';
 import { getTasks } from '../controllers/getTaskController';
 import { getPhrases } from '../controllers/getPhrasesController';
 import { getGoals } from '../controllers/getGoalsController';
+import { getUserTasks } from '../controllers/getUserTaskController';
+import { searchTasks } from '../controllers/searchTasks';
+
 
 
 const router = express.Router();
@@ -68,6 +71,21 @@ router.get('/goallist', verifyToken, async (req, res) => {
   // console.log('entro aqui al hacer la consulta de las Metas...');
   await getGoals(req, res); // Llamamos al controlador que obtiene las tareas
 });
+
+// ruta para hacer la consulta a las tereas de dicho usuario que se muestran en el componente
+router.get('/loadTasks', verifyToken, async (req, res) => {
+  await getUserTasks(req, res); // Llamamos al controlador que obtiene las tareas
+});
+
+// ruta para hacer la busqueda de tareas de cierto usuario
+router.get('/searchTasks', verifyToken, async (req, res) => {
+  await searchTasks(req, res); // Llamamos al controlador que obtiene las tareas
+});
+
+
+
+
+
 
 export default router;
 

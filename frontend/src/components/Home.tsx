@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import axios from 'axios';
 import { useEffect } from "react";
-import '../styles/home.css';
+import styles from '../styles/home.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSadTear } from '@fortawesome/free-solid-svg-icons';
@@ -74,7 +74,7 @@ const Home = () => {
     if (hours >= 0 && hours < 8) {
       console.log('Periodo: morning');
       currentPeriod = 'morning';
-    } else if (hours >= 8 && hours < 16) {  // Cambiamos el límite de la tarde
+    } else if (hours >= 8 && hours < 18) {  // Cambiamos el límite de la tarde
       console.log('Periodo: afternoon');
       currentPeriod = 'afternoon';
     } else {
@@ -84,6 +84,7 @@ const Home = () => {
   
     const lastNotifiedPeriod = localStorage.getItem("lastNotifiedPeriod");
     // const taskNotified = localStorage.getItem("taskNotified");
+    console.log(lastNotifiedPeriod, 'ultimo periodo notificado')
 
     if (lastNotifiedPeriod !== currentPeriod) {
       console.log('🚀 Se activará la notificación');
@@ -248,196 +249,186 @@ const Home = () => {
   };
 
   return (
-    <div className="home-container">
-        {/* mostrar que tiene tareas pendientes */}
-       {showAlert && (
-        <div className="card-notification">
-          <div className="icon">
-            <FontAwesomeIcon icon={faSadTear} className="alert-icon" />
+    <div className={styles['home-container']}>
+      {/* mostrar que tiene tareas pendientes */}
+      {showAlert && (
+        <div className={styles['card-notification']}>
+          <div className={styles.icon}>
+            <FontAwesomeIcon icon={faSadTear} className={styles['alert-icon']} />
           </div>
-          <div className="modal-content-notification">
-            <p className="message-text">Tareas pendientes</p>
-            <p className="sub-text">Tienes tareas que debes completar</p>
+          <div className={styles['modal-content-notification']}>
+            <p className={styles['message-text']}>Tareas pendientes</p>
+            <p className={styles['sub-text']}>Tienes tareas que debes completar</p>
           </div>
         </div>
-        )}
-
-       {/* mostrar error aqui */}
-        <div className="errors">
-              {errors.userId && <p className="error">{errors.userId}</p>}
-              {errors.general && <p className="error">{errors.general}</p>}
-        </div>
+      )}
+  
+      {/* mostrar error aqui */}
+      <div className={styles.errors}>
+        {errors.userId && <p className={styles.error}>{errors.userId}</p>}
+        {errors.general && <p className={styles.error}>{errors.general}</p>}
+      </div>
+  
       {username ? (
         <>
-          <div className="header">
-          <h1 className="welcome-text">
-            Bienvenido, <span className="username">{username}</span> <span className="wave">👋</span>
-          </h1>
-            <div className="header-buttons">
-            <button onClick={handleLogout} className="logout-button" title="Cerrar sesión">
-              <FontAwesomeIcon icon={faSignOutAlt} />
-            </button>
+          <div className={styles.header}>
+            <h1 className={styles['welcome-text']}>
+              Bienvenido, <span className={styles.username}>{username}</span> <span className={styles.wave}>👋</span>
+            </h1>
+            <div className={styles['header-buttons']}>
+              <button onClick={handleLogout} className={styles['logout-button']} title="Cerrar sesión">
+                <FontAwesomeIcon icon={faSignOutAlt} />
+              </button>
             </div>
-
           </div>
   
-          <div className="dashboard">
+          <div className={styles.dashboard}>
             {/* 📌 SECCIÓN DE TAREAS */}
-            <div className="card">
+            <div className={styles.card}>
               <h3>Tareas Diarias</h3>
-              <div className={`list-container ${showAlert ? "alert-red" : ""}`}
-               onClick={handleNavigate} >
+              <div className={`${styles['list-container']} ${showAlert ? styles['alert-red'] : ''}`} onClick={handleNavigate}>
                 {tareas.length > 0 ? (
-                <div className="task-text" title='Ver contenido'>
-                  {/* Mostrar task_name */}
-                  <div className="title-name">
-                    {tareas[0].task_name && tareas[0].task_name.length > 25 
-                    ? `${tareas[0].task_name.substring(0, 25)}...` 
-                    : tareas[0].task_name}
+                  <div className={styles['task-text']} title='Ver contenido'>
+                    {/* Mostrar task_name */}
+                    <div className={styles['title-name']}>
+                      {tareas[0].task_name && tareas[0].task_name.length > 25
+                        ? `${tareas[0].task_name.substring(0, 25)}...`
+                        : tareas[0].task_name}
+                    </div>
+  
+                    {/* Mostrar si la tarea está completa */}
+                    <div className={styles['task-status']}>
+                      {tareas[0].complete ? (
+                        <span className={styles['complete-status']}>Completada</span>
+                      ) : (
+                        <span className={styles['incomplete-status']}>Pendiente</span>
+                      )}
+                    </div>
+  
+                    {/* Mostrar la fecha de creación de la tarea */}
+                    <div className={styles['task-date']}>
+                      <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
+                      {new Date(tareas[0].created_at)
+                        .toLocaleDateString('es-ES', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })
+                        .replace(/ de /g, ' ')}
+                    </div>
                   </div>
-
-                  {/* Mostrar si la tarea está completa */}
-                  <div className="task-status">
-                    {tareas[0].complete ? (
-                      <span className="complete-status">Completada</span>
-                    ) : (
-                      <span className="incomplete-status">Pendiente</span>
-                    )}
-                  </div>
-                  
-                  {/* Mostrar la fecha de creación de la tarea */}
-                  <div className="task-date">
-                    <FontAwesomeIcon icon={faClock} style={{ marginRight: "5px" }} />
-                    {new Date(tareas[0].created_at)
-                      .toLocaleDateString("es-ES", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })
-                      .replace(/ de /g, " ") 
-                      .replace(/(\d+) (\w+)/, "$1 $2,")}
-                  </div>
-                </div>
-                 ) : (
-                <p className="empty-text">No hay tareas aún.</p>
+                ) : (
+                  <p className={styles['empty-text']}>No hay tareas aún.</p>
                 )}
               </div>
-
-              {/* Agrega un h1 aquí para asegurarnos de que se muestre */}
-              <button className="add-button" onClick={() => openModal()}>
+  
+              <button className={styles['add-button']} onClick={() => openModal()}>
                 <FontAwesomeIcon icon={faPlus} /> Agregar Tarea
               </button>
             </div>
   
             {/* 🎯 SECCIÓN DE FRASES */}
-            <div className="card">
+            <div className={styles.card}>
               <h3>Frases o Diario</h3>
-              <div className="list-container">
+              <div className={styles['list-container']}>
                 {frases.length > 0 ? (
-                  <div className="task-text">
-                    <div className="title-name">
-                      {frases[0].phrase && frases[0].phrase.length > 25 
-                      ? `${frases[0].phrase.substring(0, 25)}...` 
-                      : frases[0].phrase}
+                  <div className={styles['task-text']}>
+                    <div className={styles['title-name']}>
+                      {frases[0].phrase && frases[0].phrase.length > 25
+                        ? `${frases[0].phrase.substring(0, 25)}...`
+                        : frases[0].phrase}
                     </div>
-                  <div className="author-info">
-                    <div className="content-author">
-                      <span className="author">{frases[0].author}</span>
-                      <span className={`favorite-icon ${frases[0].favorite ? "favorite" : "not-favorite"}`}>
-                        {frases[0].favorite ? (
-                          <FontAwesomeIcon icon={faHeartCircleBolt} /> // Corazón rojo si es favorito
-                        ) : (
-                          <FontAwesomeIcon icon={faHeartCircleBolt} /> // Corazón roto si no es favorito
-                        )}
+                    <div className={styles['author-info']}>
+                      <div className={styles['content-author']}>
+                        <span className={styles.author}>{frases[0].author}</span>
+                        <span className={`${styles['favorite-icon']} ${frases[0].favorite ? styles.favorite : styles['not-favorite']}`}>
+                          <FontAwesomeIcon icon={faHeartCircleBolt} />
+                        </span>
+                      </div>
+                      <span className={styles['task-date']}>
+                        <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
+                        {new Date(frases[0].created_at)
+                          .toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })
+                          .replace(/ de /g, ' ')}
                       </span>
                     </div>
-                    <span className="task-date">
-                      <FontAwesomeIcon icon={faClock} style={{ marginRight: "5px" }} />
-                      {new Date(frases[0].created_at)
-                        .toLocaleDateString("es-ES", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
-                        .replace(/ de /g, " ") 
-                        .replace(/(\d+) (\w+)/, "$1 $2,")}
-                    </span>
                   </div>
-                </div>
                 ) : (
-                  <p className="empty-text">No hay frases aún.</p>
+                  <p className={styles['empty-text']}>No hay frases aún.</p>
                 )}
               </div>
-
-              <button className="add-button" onClick={openPhraseModal}>
+  
+              <button className={styles['add-button']} onClick={openPhraseModal}>
                 <FontAwesomeIcon icon={faPlus} /> Agregar Frase
               </button>
             </div>
   
             {/* ✨ SECCIÓN DE METAS */}
-            <div className="card">
+            <div className={styles.card}>
               <h3>Metas</h3>
-              <div className="list-container">
+              <div className={styles['list-container']}>
                 {metas.length > 0 ? (
-                  <div className="task-text">
-                    <div className="title-name">
-                      <p className="goals">
+                  <div className={styles['task-text']}>
+                    <div className={styles['title-name']}>
+                      <p className={styles.goals}>
                         {metas[0].goal && metas[0].goal.length > 25
-                          ? `${metas[0].goal.substring(0, 25)}...` 
+                          ? `${metas[0].goal.substring(0, 25)}...`
                           : metas[0].goal}
                       </p>
                     </div>
-                    <p className="goals-unit"> {metas[0].unit}</p> {/* Unidad después del nombre */}
-                    <p className="task-date">
-                      <FontAwesomeIcon icon={faClock} style={{ marginRight: "5px" }} />
-                      Termina el: {metas[0].start_date 
+                    <p className={styles['goals-unit']}> {metas[0].unit}</p>
+                    <p className={styles['task-date']}>
+                      <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
+                      Termina el: {metas[0].start_date
                         ? new Date(metas[0].end_date)
-                            .toLocaleDateString("es-ES", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
+                            .toLocaleDateString('es-ES', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
                             })
-                            .replace(/ de /g, " ") 
-                            .replace(/(\d+) (\w+)/, "$1 $2,")
-                        : "Fecha no disponible"}
+                            .replace(/ de /g, ' ')
+                        : 'Fecha no disponible'}
                     </p>
                   </div>
                 ) : (
-                  <p className="empty-text">No hay metas aún.</p>
+                  <p className={styles['empty-text']}>No hay metas aún.</p>
                 )}
               </div>
-
-              <button className="add-button" onClick={openGoalsModal}>
+  
+              <button className={styles['add-button']} onClick={openGoalsModal}>
                 <FontAwesomeIcon icon={faPlus} /> Agregar Meta
               </button>
             </div>
-
           </div>
-
-           {/* Footer */}
-          <footer className="footer">
+  
+          {/* Footer */}
+          <footer className={styles['footer']}>
             <p>© TASLY - Created by Ramiro {currentYear}</p>
           </footer>
         </>
       ) : (
-        "Cargando..."
+        'Cargando...'
       )}
-
+  
       {/* modales donde se maneja el actualizar tarea, el cerrar modal, desde ModalTask a Home */}
-        <ModalTask
-        isOpen={isModalOpen}  
-        onClose={closeModal}  
+      <ModalTask
+        isOpen={isModalOpen}
+        onClose={closeModal}
         onSubmit={() => {}}
         onTaskAdded={handleTaskAdded}
       />
-
+  
       <Modalphrases
-        isOpen={isPhraseModalOpen}  
-        onClose={closePhraseModal}  
+        isOpen={isPhraseModalOpen}
+        onClose={closePhraseModal}
         onSubmit={() => {}}
         onPhrasesAdded={handlePhrasesAdded}
       />
-
+  
       <ModalGoals
         isOpen={isModalGoalsOpen}
         onClose={closeGoalsModal}

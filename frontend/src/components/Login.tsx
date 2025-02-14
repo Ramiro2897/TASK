@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../styles/Login.css';
+import styles from '../styles/login.module.css';
+// import '../styles/Login.css';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -60,43 +61,43 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
+    <div className={styles['login-container']}>
+      <form className={styles['login-form']} onSubmit={handleSubmit}>
         <h2>TASLY</h2>
 
-        {message && <p className="message">{message}</p>}
+        {message && <p className={styles['message']}>{message}</p>}
 
-        <div className="input-group">
+        <div className={styles['input-group']}>
           <label>Usuario</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Ingresa tu usuario"
-            className={errors.username ? 'input-error' : ''}
+            className={errors.username ? styles['input-error'] : ''}
           />
-          {errors.username && <p className="error">{errors.username}</p>}
+          {errors.username && <p className={styles['error']}>{errors.username}</p>}
         </div>
 
-        <div className="input-group">
+        <div className={styles['input-group']}>
           <label>Contraseña</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Ingresa tu contraseña"
-            className={errors.password ? 'input-error' : ''}
+            className={errors.password ? styles['input-error'] : ''}
           />
-          {errors.password && <p className="error">{errors.password}</p>}
+          {errors.password && <p className={styles['error']}>{errors.password}</p>}
         </div>
 
-        <button type="submit">Ingresar</button>
+        <button type="submit">{'Ingresar'}</button>
 
-        <div className="register-link">
+        <div className={styles['register-link']}>
           <p>¿Aún no tienes cuenta? <a href="/register">Crea una</a></p>
         </div>
 
-        <div className="social-icons">
+        <div className={styles['social-icons']}>
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faInstagram} />
           </a>
@@ -110,6 +111,7 @@ const Login: React.FC = () => {
       </form>
     </div>
   );
+
 };
 
 export default Login;
