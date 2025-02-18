@@ -10,7 +10,7 @@ import axios from 'axios';
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ username?: string; password?: string; general?: string }>({});
   const [message, setMessage] = useState<string>(''); // Para mensajes generales de error o éxito
 
   const navigate = useNavigate(); // Hook para redirección
@@ -66,6 +66,8 @@ const Login: React.FC = () => {
         <h2>TASLY</h2>
 
         {message && <p className={styles['message']}>{message}</p>}
+        {errors.general && <p className={styles['error']}>{errors.general}</p>}
+
 
         <div className={styles['input-group']}>
           <label>Usuario</label>
@@ -101,7 +103,7 @@ const Login: React.FC = () => {
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faInstagram} />
           </a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://wa.me/573002353297" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faWhatsapp} />
           </a>
           <a href="https://github.com/Ramiro2897" target="_blank" rel="noopener noreferrer">

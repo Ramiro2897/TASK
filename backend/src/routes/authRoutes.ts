@@ -12,8 +12,8 @@ import { getGoals } from '../controllers/getGoalsController';
 import { getUserTasks } from '../controllers/getUserTaskController';
 import { searchTasks } from '../controllers/searchTasks';
 import { updateTaskStatus } from '../controllers/updateTaskStatus';
-
-
+import { deleteTask } from '../controllers/deleteTask';
+import { updateTask } from '../controllers/updateTask';
 
 
 const router = express.Router();
@@ -31,7 +31,6 @@ router.post('/login', async (req, res) => {
 router.post('/logout', (req: Request, res: Response) => {
   console.log('entra aqui')
   // Eliminar el token o cualquier otra acción que sea necesaria en el servidor
-  // Si tienes alguna sesión guardada en memoria o en otro lugar, la eliminamos aquí
 
   // Solo respondemos que la sesión fue cerrada
   res.status(200).json({ message: 'Sesión cerrada exitosamente' });
@@ -89,8 +88,17 @@ router.put('/updateTask', verifyToken, async (req, res) => {
   await updateTaskStatus(req, res); // Llamamos al controlador para actualizar el estado
 });
 
+// Ruta para eliminar una tarea
+router.delete('/deleteTask', verifyToken, async (req, res) => {
+  // console.log('entra aquiiiiii');
+  await deleteTask(req, res); // Llamamos al controlador para actualizar el estado
+});
 
-
+// ruta para actualizar una tarea
+router.put('/taskUpdate', verifyToken, async (req, res) => {
+  console.log('entra aquiiiiii');
+  await updateTask(req, res); // Llamamos al controlador para actualizar el estado
+});
 
 export default router;
 

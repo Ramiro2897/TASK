@@ -21,7 +21,16 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
       errors: { task_name: 'Error inesperado.' }
     });
   }
+
+  // validamos el nombre de la tarea
+  if (task.length > 40) {
+    console.log('Nombre de la tarea demasiado largo:', task);
+    return res.status(400).json({
+      errors: { task_name: 'Nombre de la tarea muy extenso.' }
+    });
+  }
   
+
   // Validaciones de entrada para asegurarse de que los campos sean correctos
   if (!task || task.trim() === '') {
     console.log('Datos incompletos - task_name:', task);

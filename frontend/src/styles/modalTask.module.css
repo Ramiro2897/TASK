@@ -19,7 +19,7 @@
   max-width: 400px;
   width: 90%;
   text-align: center;
-  color: white;
+  color: #f2f2f2;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
@@ -95,7 +95,7 @@
 .modal-actions button:first-child {
   background-color: transparent; 
   color: #ccc; 
-  border: 2px solid #ff4757; 
+  border: 2px solid rgba(255, 255, 255, 0.20);
   border-radius: 5px;
   padding: 8px 20px;
   font-size: .9rem;
@@ -103,7 +103,7 @@
 }
 
 .modal-actions button:first-child:hover {
-  background-color: #ff4757; 
+  background-color: #025951; 
   color: #ccc; 
 }
 .modal-content select {
@@ -141,8 +141,8 @@
 }
 
 .modal-actions button:last-child {
-  background-color: transparent; /* Fondo transparente */
-  color: #ccc; /* Color gris para el texto */
+  background-color: transparent;
+  color: #ccc; 
   border: 2px solid rgba(255, 255, 255, 0.20);
   border-radius: 5px;
   padding: 8px 20px;
@@ -152,14 +152,14 @@
 }
 
 .modal-actions button:last-child:hover {
-  background-color: rgba(255, 255, 255, 0.20); /* Fondo gris al hacer hover */
-  color: white; /* Texto blanco al hacer hover */
+  background-color: #998d8d28; 
+  color: #f2f2f2; 
 }
 
 /* modal de tarea guardada con exito */
 .success-message {
   background-color: #04D939; 
-  color: white;
+  color: #f2f2f2;
   padding: 12px;
   margin-bottom: 10px;
   text-align: center;
@@ -174,7 +174,7 @@
 /* modal de un error para cuando se intenta crear una tarea */
 .error-message {
   background-color: #ff6b6b; 
-  color: #fff;
+  color: #f2f2f2;
   padding: 12px;
   border-radius: 6px;
   text-align: center;

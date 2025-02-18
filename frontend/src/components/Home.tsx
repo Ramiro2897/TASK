@@ -108,6 +108,7 @@ const Home = () => {
         });
         const latestTask = response.data[0]; 
         setTareas(response.data); // Guardamos las tareas en el estado
+        console.log(response.data, 'tareas del usuario')
         
         const currentDate = new Date();
         const taskDate = new Date(latestTask?.created_at);

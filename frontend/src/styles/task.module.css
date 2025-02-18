@@ -129,7 +129,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 30px;
   padding: 5px;
 }
 
@@ -167,6 +167,15 @@ body{
   background-color: #025951;
 }
 
+.noTask{
+  width: 100%;
+  font-size: 1.5rem;
+  color: #ccc;
+  margin-top: 50px;
+  text-align: center;
+  font-weight: bolder;
+}
+
 /* estilos para no se encontraron tareas */
 .error-container{
   width: 100%;
@@ -176,7 +185,30 @@ body{
   align-items: center;
   justify-content: center;
   margin-top: 10px;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
+}
+
+.back{
+  padding: 5px 10px;
+  height: 40px;
+  visibility: hidden;
+}
+
+.back.visible {
+  visibility: visible;
+}
+
+.back svg {
+  color: #ccc; 
+  font-size: 1rem; 
+  padding: 10px 15px;
+  background-color: #034159;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.back svg:hover{
+  background-color: #025951;
 }
 
 .error-container .error-search{
@@ -274,7 +306,8 @@ body{
   height: auto;
   display: flex;
   justify-content: space-between;
-  padding: 0 4px;
+  align-items: flex-start;
+  gap: 5px;
 }
 
 .dashboard_task .task-name p{
@@ -282,6 +315,11 @@ body{
   color: #F2F2F2;
   font-size: 0.7rem;
   font-weight: 600;
+  flex: 1; /* Permite que el texto tome todo el espacio disponible */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  min-width: 0;
+  white-space: normal;
 }
 
 /* Estilos para las prioridades */
@@ -292,6 +330,7 @@ body{
   border-radius: 5px;
   font-size: 0.68rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .mediumPriority {
@@ -301,6 +340,7 @@ body{
   border-radius: 5px;
   font-size: 0.68rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .lowPriority {
@@ -310,6 +350,7 @@ body{
   border-radius: 5px;
   font-size: 0.68rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Contenedor de la prioridad */
@@ -365,6 +406,150 @@ body{
   background: #58929c;
 }
 
+/* modal para eliminar, editar una tarea */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  pointer-events: auto;
+}
+
+.modalContent {
+  width: 400px;
+  max-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #998d8d28;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  margin-top: 15px;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalContent p{
+  font-size: .9rem;
+  color: #F2F2F2;
+  padding: 5px;
+  font-weight: bold;
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  word-break: break-word; 
+  white-space: normal;
+}
+
+/* estilo para el modal de actualizar */
+.modalContent label {
+  width: 100%;
+  text-align: left;
+  font-size: .8rem;
+  color: #ccc;
+  margin-top: 5px;
+  padding: 0px 4px;
+}
+
+/* estilo para el modal de actualizar */
+.modalContent input, .modalContent select{
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 5px; 
+  border: none;
+  background: rgba(50, 50, 50, 0.3);
+  color: #ccc; 
+  font-size: .9rem; 
+  transition: border-color 0.3s;
+}
+
+/* estilo para el modal de actualizar */
+select option {
+  background: rgba(0, 0, 0, 0.7); 
+  color: #ccc;
+}
+
+/* estilo para el modal de actualizar */
+.modal-content select option:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* estilo para el modal de actualizar */
+.error-search{
+  width: 100%;
+  font-size: .7rem;
+  font-style: italic;
+  font-weight: 100 !important;
+}
+
+
+
+
+
+.modalContent input:focus, .modalContent select:focus{
+  outline: none;
+  background: rgba(60, 60, 60, 0.4);
+}
+
+.modalContent input::placeholder{
+  color: #ccc;
+  font-size: .8rem;
+}
+
+
+.modalContent .question{
+  font-size: .8rem;
+  font-weight: bold;
+  padding: 5px;
+  color: #ccc;
+}
+
+.modalOverlay .modalContent  .btn-options{
+  display: flex;
+  margin-top: 5px;
+}
+
+.modalContent button {
+  display: flex; 
+  align-items: center;
+  gap: 5px;
+  margin: 10px 8px;
+  padding: 8px 8px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: .8rem;
+  color: #F2F2F2;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* cuando la tarea expira... */
+.expired-task {
+  opacity: 0.6; /* Hace que la tarea se vea más apagada */
+  background: rgba(153, 141, 141, 0.2); /* Hace el fondo más tenue */
+  filter: grayscale(40%); /* Agrega un ligero tono gris para diferenciarla */
+}
+
+
 
 /* media queries pantallas inferiores a 768px */
 @media (max-width: 768px) {
@@ -408,4 +593,13 @@ body{
     grid-template-columns: repeat(1, 1fr); /* 1 tarjeta por fila */
     max-width: 100%;
   }
+
 }
+
+@media (max-width: 320px) {
+  .modalContent {
+    width: 380px;
+    max-width: 280px;
+  }
+}
+
