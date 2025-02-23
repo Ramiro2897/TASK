@@ -69,7 +69,7 @@ const Task = () => {
     loadTasks ();
   }, []);
 
-  // funciona para hacer la busqueda de usuarios
+  // funcion para hacer la busqueda de usuarios
   const handleSearch = async () => {
     try {
       const API_URL = import.meta.env.VITE_API_URL;
@@ -96,7 +96,13 @@ const Task = () => {
       setIsSearching(false); // no aparece el boton de ir atras cuando se hace una busqueda en caso de error...
       setErrors(error.response?.data?.errors || { general: "Error en la búsqueda." });
       setTimeout(() => {
-        setErrors((prevErrors) => ({ ...prevErrors, general: "" }));
+        setErrors(() => {
+          // Si aún no hay frases, volvemos a mostrar el mensaje predeterminado
+          if (tasks.length === 0 && searchResults.length === 0) {
+            return { message: "Parece que tu lista está vacía." };
+          }
+          return {}; // Si hay frases, no mostramos ningún mensaje
+        });
       }, 5000); 
     }
   };
@@ -120,6 +126,12 @@ const Task = () => {
   const handleGoHome = () => {
     navigate("/Home"); // Navega a la página Home
   };
+
+  const handleGoPhrases = () => {
+    navigate("/phrases"); // Navega a la página frases
+  };
+
+
 
   // Datos blobales del usuario para realizar acciones
   const user = localStorage.getItem("user");
@@ -260,6 +272,13 @@ const Task = () => {
       setSearchResults(updatedSearchResults);
       setTasks(updatedTasks);
       handleCloseEditModal(); //cierra el modal
+      // noticacion de audio
+     const playSound = () => {
+      const audio = new Audio('/OpenClose.mp3'); 
+      audio.volume = 0.3;
+      audio.play();
+    };
+    playSound();
   
     } catch (error: any) {
       setErrors(error.response?.data?.errors || { general: 'Error al actualizar la tarea.' });
@@ -311,6 +330,7 @@ const Task = () => {
   // funcion abrir el modal de actualizar
   const handleOpenEditModal = () => {
     setShowEditModal(true);
+    setShowModal(false);
   };
   // funcion para cerrar el modal de editar
   const handleCloseEditModal = () => {
@@ -367,7 +387,6 @@ const Task = () => {
                 type="date" 
                 value={newDate} 
                 onChange={(e) => {
-                  console.log("newDate en onChange:", e.target.value); // Verifica el valor al cambiar
                   setNewDate(e.target.value);
                   }} 
                 />
@@ -404,7 +423,7 @@ const Task = () => {
             <FontAwesomeIcon icon={faArrowLeft} onClick={handleGoHome}/> Ir Home
           </div>
           <div className={styles['options_list']}>
-            <FontAwesomeIcon icon={faQuoteLeft} /> Frases
+            <FontAwesomeIcon icon={faQuoteLeft} onClick={handleGoPhrases} /> Frases
           </div>
           <div className={styles['options_list']}>
             <FontAwesomeIcon icon={faBullseye} /> Metas

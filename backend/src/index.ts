@@ -2,11 +2,10 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { Pool } from 'pg';
 import cors from 'cors';
+import path from 'path';
 import authRoutes from './routes/authRoutes';  
 import cron from 'node-cron';
 import archiveOldTasks from './controllers/taskArchiver';
-
-
 
 dotenv.config();
 
@@ -39,17 +38,6 @@ const connectDB = async () => {
 
 connectDB();
 
-// Ruta de prueba para verificar la conexión a la base de datos
-app.get('/', async (_req: Request, res: Response) => {
-  try {
-    const result = await pool.query('SELECT NOW()');
-    res.json(result.rows);
-  } catch (err) {
-    console.error('❌ Error en la base de datos:', err);
-    res.status(500).send('Error en la base de datos');
-  }
-});
-
 // Rutas de autenticación
 app.use('/api/auth', authRoutes);
 
@@ -59,10 +47,16 @@ cron.schedule('0 0 7 * *', () => {
   archiveOldTasks(); // Llamamos a la función que archiva las tareas
 });
 
+// 📌 Servir archivos estáticos de frontend/dist
+app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 
+// 📌 Servir index.html en rutas desconocidas (para React/Vite)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
+});
 
 // Iniciar el servidor
 app.listen(3000, '0.0.0.0', () => {
+  console.log(`🏠 Accede a la ruta principal en: http://localhost:${port}/Home`);
   console.log('🚀 Servidor backend corriendo en http://0.0.0.0:3000');
 });
-

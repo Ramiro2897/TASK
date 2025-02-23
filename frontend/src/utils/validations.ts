@@ -1,4 +1,4 @@
-// validar el inicio de sesion
+// // validar el inicio de sesion
 export const validateLoginUsername = (username: string): boolean => {
   return !username.trim(); // Devuelve true si hay un error (usuario vacío)
 };

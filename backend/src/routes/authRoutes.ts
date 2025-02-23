@@ -14,6 +14,12 @@ import { searchTasks } from '../controllers/searchTasks';
 import { updateTaskStatus } from '../controllers/updateTaskStatus';
 import { deleteTask } from '../controllers/deleteTask';
 import { updateTask } from '../controllers/updateTask';
+import { searchPhrases } from '../controllers/searchPhrases';
+import { getUserPhrases } from '../controllers/getUserPhrasesController';
+import { deletePhrase } from '../controllers/deletePhrase';
+import { updatePhrase } from '../controllers/updatePhrase';
+import { updatePhraseFavorite } from '../controllers/updatePhraseFavorite';
+
 
 
 const router = express.Router();
@@ -99,6 +105,36 @@ router.put('/taskUpdate', verifyToken, async (req, res) => {
   console.log('entra aquiiiiii');
   await updateTask(req, res); // Llamamos al controlador para actualizar el estado
 });
+
+// ruta para hacer la busqueda de frases de cierto usuario
+router.get('/searchPhrases', verifyToken, async (req, res) => {
+  await searchPhrases(req, res); 
+});
+
+// ruta para hacer la consulta a las frases de dicho usuario que se muestran en el componente
+router.get('/loadPhrases', verifyToken, async (req, res) => {
+  await getUserPhrases(req, res);
+});
+
+// Ruta para eliminar una frase
+router.delete('/deletePhrase', verifyToken, async (req, res) => {
+  console.log('eliminando frase');
+  await deletePhrase(req, res); // Llamamos al controlador para actualizar el estado
+});
+
+// ruta para actualizar una tarea
+router.put('/phraseUpdate', verifyToken, async (req, res) => {
+  console.log('entra al actualizar frase');
+  await updatePhrase(req, res); // Llamamos al controlador para actualizar el estado
+});
+
+// Ruta para actualizar el estado de la frase (favorita)
+router.put('/updateFavorite', verifyToken, async (req, res) => {
+  console.log('entra cuando se da click en favorite');
+  await updatePhraseFavorite(req, res); // Llamamos al controlador para actualizar el estado
+});
+
+
 
 export default router;
 

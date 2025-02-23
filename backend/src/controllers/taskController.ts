@@ -3,8 +3,6 @@ import { pool } from '../index';  // Importa la conexión desde index.ts
 
 export const createTask = async (req: Request, res: Response): Promise<Response> => {
   const { task, startDate, endDate, category, priority, userId } = req.body;
-  console.log('entra aqui xd xd cd', task);
-  console.log('Datos recibidos:', req.body);
 
   // Obtener la fecha actual en formato YYYY-MM-DD
   const today = new Date().toLocaleDateString('es-CO', {
@@ -13,7 +11,6 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
     day: '2-digit',
   }).split('/').reverse().join('-');
   
-  console.log('fecha que necesitamos...', today);
 
   if (!userId) {
     console.log('Datos incompletos - userId:', userId);

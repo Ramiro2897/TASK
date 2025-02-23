@@ -4,11 +4,7 @@ import axios from 'axios';
 import { useEffect } from "react";
 import styles from '../styles/home.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { faSadTear } from '@fortawesome/free-solid-svg-icons';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { faHeartCircleBolt } from "@fortawesome/free-solid-svg-icons";
-import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faSadTear, faPlus, faHeartCircleBolt, faClock, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import ModalTask from '../components/ModalTask';  
 import Modalphrases from '../components/Modalphrases'; 
 import ModalGoals from '../components/ModalGoals'; 
@@ -249,6 +245,16 @@ const Home = () => {
     navigate('/tasks');  // Redirige a "/tasks"
   };
 
+  // funcion que lleva a el modulo de información
+  const handleGoInformation = () => {
+    navigate("/information"); // Navega a la página Home
+  };
+
+  // funcion para llevar a frases
+  const handleGoPhrases = ()=>{
+    navigate("/phrases");
+  }
+
   return (
     <div className={styles['home-container']}>
       {/* mostrar que tiene tareas pendientes */}
@@ -330,8 +336,8 @@ const Home = () => {
   
             {/* 🎯 SECCIÓN DE FRASES */}
             <div className={styles.card}>
-              <h3>Frases o Diario</h3>
-              <div className={styles['list-container']}>
+              <h3>Frases o Notas</h3>
+              <div className={styles['list-container']} onClick={handleGoPhrases}>
                 {frases.length > 0 ? (
                   <div className={styles['task-text']}>
                     <div className={styles['title-name']}>
@@ -408,7 +414,8 @@ const Home = () => {
   
           {/* Footer */}
           <footer className={styles['footer']}>
-            <p>© TASLY - Created by Ramiro {currentYear}</p>
+            <p>© TASLY - Created by Ramiro {currentYear} <span className={styles['span']} title='información' 
+            onClick={handleGoInformation}><FontAwesomeIcon icon={faQuestion} /></span></p>
           </footer>
         </>
       ) : (
