@@ -17,7 +17,7 @@ const Information = () => {
         una idea para el futuro, ya que aún no tengo un plan definido para implementarlo. Además, incorporé un sistema de metas, donde el enfoque está en 
         permitir trazar objetivos a largo plazo (mínimo tres meses) y registrar el progreso cada vez que sientas que has avanzado.<br /><br />
 
-        <h3>¿Cómo funciona?</h3><br />
+        <strong><span style={{ fontSize: "1.3em", marginTop: "10px", display: "block"  }}>¿Cómo funciona?</span></strong> <br />
         El acceso a la aplicación es sencillo y seguro. No necesitas ingresar correos ni datos personales adicionales. Aquí tu privacidad es prioridad. Solo 
         crea un usuario, genera una contraseña sencilla pero segura, y empieza a gestionar tus tareas, metas y frases favoritas, ya sean de tu autor preferido 
         o pensamientos que hayas escrito en algún momento de tu vida.<br /><br />

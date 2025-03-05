@@ -2,16 +2,16 @@ import { Request, Response } from 'express';
 import { pool } from '../index';  // Importa la conexión desde index.ts
 
 export const createPhrase = async (req: Request, res: Response): Promise<Response> => {
-  const { phrase, userId, author } = req.body;
+  // Verificar si el usuario está autenticado
+  const user = (req as any).user;
+  if (!user) {
+    return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+  }
+
+  const { phrase, author } = req.body;
 
   console.log('Datos recibidos:', req.body);
 
-  if (!userId) {
-    console.log('Error: userId es obligatorio.');
-    return res.status(400).json({
-      errors: { userId: 'Error inesperado.' }
-    });
-  }
 
   if (!phrase || phrase.trim() === '') {
     console.log('Error: La frase no puede estar vacía.');
@@ -45,7 +45,7 @@ export const createPhrase = async (req: Request, res: Response): Promise<Respons
     const result = await pool.query(
       `INSERT INTO phrases (phrase, author, created_at, user_id)
        VALUES ($1, $2, CURRENT_TIMESTAMP, $3) RETURNING *`,
-      [phrase, author, userId]
+      [phrase, author, user.id]
     );
     
     const newPhrase = result.rows[0];

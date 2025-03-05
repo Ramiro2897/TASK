@@ -3,6 +3,12 @@ import { pool } from '../index'; // Importamos la conexión a la base de datos
 
 export const updatePhraseFavorite = async (req: Request, res: Response): Promise<Response> => {
   try {
+     // Verificar si el usuario está autenticado
+     const user = (req as any).user;
+     if (!user) {
+       return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+     }
+
     const phraseId = req.headers['phrase-id']; 
     const favorite = req.headers['favorite'];
     console.log('datos de la frase para favorita', favorite, phraseId)

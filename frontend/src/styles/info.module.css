@@ -52,6 +52,11 @@
   text-align: justify;
 }
 
+.info-section .info-question{
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
 .details, .contact {
   margin-top: 20px;
   padding: 15px;

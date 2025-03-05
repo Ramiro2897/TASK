@@ -3,19 +3,15 @@ import { pool } from '../index';  // Importamos la conexión a la base de datos
 
 export const getGoals = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const userId = req.headers['user-id']; // Extraemos el userId desde los headers
-    // console.log('userId de las metas a consultar...:', userId);
-
-    if (!userId || userId === '') {
-      return res.status(400).json({
-        errors: { userId: 'El ID de usuario es obligatorio.' }
-      });
+    // Verificar si el usuario está autenticado
+    const user = (req as any).user;
+    if (!user) {
+      return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
     }
-    // console.log(`Obteniendo metas del usuario: ${userId}`);
 
     const result = await pool.query(
       'SELECT id, goal, description, current_value, unit, start_date, end_date FROM goals WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1',
-      [userId]
+      [user.id]
     );
 
     // console.log('meta obtenida de la base de datos:', result.rows);

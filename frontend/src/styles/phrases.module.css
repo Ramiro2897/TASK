@@ -226,6 +226,7 @@ body{
   padding: 10px;
   max-width: 900px; 
   margin: 0 auto; 
+  align-items: start;
 }
 
 .phrases-container .dashboard_phrase .phrase-item{

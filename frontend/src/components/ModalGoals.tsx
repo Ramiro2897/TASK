@@ -23,9 +23,7 @@ const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit, onGo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const user = localStorage.getItem('user');
-    const userId = user ? JSON.parse(user).id : '';
-    const goalData = { goal, description, startDate, endDate, unit, userId };
+    const goalData = { goal, description, startDate, endDate, unit};
 
     const token = localStorage.getItem('token');
     if (!token) return;

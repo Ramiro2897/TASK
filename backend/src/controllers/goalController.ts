@@ -2,7 +2,13 @@ import { Request, Response } from 'express';
 import { pool } from '../index';  // Importa la conexión desde index.ts
 
 export const createGoal = async (req: Request, res: Response): Promise<Response> => {
-  const { goal, description, startDate, endDate, unit, userId } = req.body;
+  // Verificar si el usuario está autenticado
+  const user = (req as any).user;
+  if (!user) {
+    return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+  }
+
+  const { goal, description, startDate, endDate, unit} = req.body;
   console.log('Datos recibidos:', req.body);
 
   // Obtener la fecha actual en formato YYYY-MM-DD en la zona horaria de Colombia
@@ -14,17 +20,24 @@ export const createGoal = async (req: Request, res: Response): Promise<Response>
 
   // console.log('Fecha actual en Colombia:', today);
 
-  if (!userId) {
-    console.log('Error: userId no proporcionado');
-    return res.status(400).json({
-      errors: { userId: 'El ID del usuario es obligatorio.' }
-    });
-  }
-
   if (!goal || goal.trim() === '') {
     console.log('Error: El nombre de la meta está vacío');
     return res.status(400).json({
       errors: { goal: 'El nombre de la meta no puede estar vacío.' }
+    });
+  }
+
+  if (goal.length > 35) {
+    console.log('Error: El nombre de la meta no puede superar los 35 caracteres');
+    return res.status(400).json({
+      errors: { goal: 'Nombre de la meta extenso.' }
+    });
+  }
+
+  if (description.length > 200) {
+    console.log('Error: La descripción no puede superar los 200 caracteres');
+    return res.status(400).json({
+      errors: { description: 'La descripción es muy extensa.' }
     });
   }
 
@@ -70,7 +83,7 @@ export const createGoal = async (req: Request, res: Response): Promise<Response>
     const result = await pool.query(
       `INSERT INTO goals (goal, description, start_date, end_date, unit, created_at, updated_at, user_id)
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $6) RETURNING *`,
-      [goal, description, startDate, endDate, unit, userId]
+      [goal, description, startDate, endDate, unit, user.id]
     );
 
     const newGoal = result.rows[0];

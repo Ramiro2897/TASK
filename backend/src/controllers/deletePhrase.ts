@@ -3,21 +3,36 @@ import { pool } from '../index'; // Importamos la conexión a la base de datos
 
 export const deletePhrase = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const phraseId = req.headers['phrase-id'];
-    const userId = req.headers['user-id'];
-    console.log('datos al eliminar', phraseId, userId);
+    // Verificar si el usuario está autenticado
+    const user = (req as any).user;
+    if (!user) {
+      return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+    }
 
-    // Validamos que el taskId y userId estén presentes
-    if (!phraseId || !userId) {
+
+    const phraseId = Number(req.headers['phrase-id']); 
+    // const userId = req.headers['user-id'];
+    console.log('Datos al eliminar:', { phraseId, userId: user.id });
+
+     // Validamos que phraseId sea valido
+    if (!phraseId || isNaN(phraseId)) {
       return res.status(400).json({
-        errors: { general: 'Fallo en el usuario.' }
+        errors: { general: 'ID de la frase no válido.' }
+      });
+    }
+
+
+     // Validamos que phraseId esté presente
+     if (!phraseId) {
+      return res.status(400).json({
+        errors: { general: 'Fallo en el ID de la frase.' }
       });
     }
 
     // Verificamos que la tarea pertenezca al usuario antes de eliminarla
     const taskResult = await pool.query(
       'SELECT * FROM phrases WHERE id = $1 AND user_id = $2',
-      [phraseId, userId]
+      [phraseId, user.id ]
     );
 
     if (taskResult.rows.length === 0) {

@@ -3,6 +3,12 @@ import { pool } from '../index'; // Importamos la conexión a la base de datos
 
 export const updateTaskStatus = async (req: Request, res: Response): Promise<Response> => {
   try {
+    // Verificar si el usuario está autenticado
+    const user = (req as any).user;
+    if (!user) {
+      return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+    }
+
     const taskId = req.headers['task-id']; 
     const complete = req.headers['complete'];
     const completeBool = complete === 'true'; // Esto convertirá "true" a true, y "false" a false

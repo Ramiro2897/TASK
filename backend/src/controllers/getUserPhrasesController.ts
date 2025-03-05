@@ -3,20 +3,21 @@ import { pool } from '../index';  // Importamos la conexión a la base de datos
 
 export const getUserPhrases = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const userId = req.headers['user-id']; // Extraemos el userId desde los headers
 
-    console.log('userId de las frases a consultar para el usuario:', userId);
-
-    if (!userId || userId === '') {
-      return res.status(400).json({
-        errors: { userId: 'El ID de usuario es obligatorio.' }
-      });
+    // Verificar si el usuario está autenticado
+    const user = (req as any).user;
+    if (!user) {
+      return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
     }
+
+    // 🔹 Eliminamos la extracción de userId desde los headers y usamos el user.id del token
+    console.log('userId de las frases a consultar para el usuario:', user.id);
+
 
     // Hacer la consulta para obtener todas las tareas que no estén archivadas (archived = false)
     let result = await pool.query(
       'SELECT * FROM phrases WHERE user_id = $1 ORDER BY created_at DESC',
-      [userId]
+      [user.id]
     );
 
     // Si no hay frases

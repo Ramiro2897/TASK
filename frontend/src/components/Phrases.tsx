@@ -31,9 +31,8 @@ const Phrases = () =>{
 
   // datos globales del usuario para realizar cualquier accion
   const API_URL = import.meta.env.VITE_API_URL;
-  const user = localStorage.getItem("user");
-  const userId = user ? JSON.parse(user).id : "";
   const token = localStorage.getItem("token");
+
   // -----------------------------------------------------
 
   // obtener las teras del usuario
@@ -42,8 +41,7 @@ const Phrases = () =>{
      try {
        const response = await axios.get(`${API_URL}/api/auth/loadPhrases`, {
          headers: {
-           Authorization: `Bearer ${token}`,
-           "User-Id": userId,
+           Authorization: `Bearer ${token}`
          },
        });
        if (response.data.length === 0) {
@@ -63,15 +61,14 @@ const Phrases = () =>{
     loadTasks ();
   }, []);
 
-  // funcion para hacer la busqueda de usuarios
+  // funcion para hacer la busqueda de frases
   const handleSearch = async () => {
     try {
       setErrors({});
 
       const response = await axios.get(`${API_URL}/api/auth/searchPhrases`, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "User-Id": userId,
+          Authorization: `Bearer ${token}`
         },
         params: {
           query: searchTerm,
@@ -105,7 +102,6 @@ const Phrases = () =>{
       await axios.delete(`${API_URL}/api/auth/deletePhrase`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "User-Id": userId,
           "Phrase-Id": selectedPhrase.id.toString(),
         }
       });
@@ -138,20 +134,19 @@ const Phrases = () =>{
     }
   };
 
-  // funcion para actualizar tarea
+  // funcion para actualizar frase
   const handleUpdatePhrase = async () => {
     if (!selectedPhrase) return;
     const localDate = new Date(`${newDate}T00:00:00-05:00`).toISOString();
   
     try {
       await axios.put(`${API_URL}/api/auth/phraseUpdate`, {
-        taskId: selectedPhrase.id, 
+        phraseId: selectedPhrase.id, 
         updatedDate: localDate,
         editedName,
       }, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "User-Id": userId,
+          Authorization: `Bearer ${token}`
         }
       });
       
@@ -274,15 +269,11 @@ const Phrases = () =>{
     document.body.style.pointerEvents = "auto"; 
   };
 
-
-
-
   // funcion para ocultar el botón "Ir atrás" cuando se va a lista de frases por defecto del usuario
   const handleBack = () => {
     setSearchResults([]); 
     setIsSearching(false); 
   };
-
 
   // funcion para ir a home
   const navigate = useNavigate();
@@ -302,7 +293,11 @@ const Phrases = () =>{
     {showModal && selectedPhrase && (
         <div className={styles['modalOverlay']}>
           <div className={styles['modalContent']}>
-            <p>{selectedPhrase.name}</p>
+            <p>
+              {selectedPhrase.name.length > 225 
+              ? selectedPhrase.name.slice(0, 225) + "..."
+              : selectedPhrase.name}
+            </p>
             <p className={styles['question']}> ¿Qué quieres hacer?</p>
             <div className={styles['btn-options']}>
               <button onClick={handleOpenEditModal}>
@@ -349,9 +344,6 @@ const Phrases = () =>{
           </div>
         </div>
       )}
-
-
-
 
       <div className={styles['phrases_header']}>
         <div className={styles['title']}>

@@ -52,9 +52,6 @@ const Home = () => {
   const [metas, setMetas] = useState<{ id: number; goal: string; description: string; start_date: string; end_date: string; unit: string; }[]>([]);
   const [frases, setFrases] = useState<{ id: number; phrase: string; author: string; created_at: string; favorite: boolean; }[]>([]);
 
-
-  const user = localStorage.getItem('user');
-  const userId = user ? JSON.parse(user).id : ''; 
   const token = localStorage.getItem('token');
 
   if (!token) {
@@ -62,25 +59,70 @@ const Home = () => {
   }
 
   // obtenemos el momento del dia para saber en que momento cambiar el esta de: taskNotified para que pueda notificar
+  const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL;
+  
+    const fetchData = async () => {
+      try {
+        const [tareasRes, frasesRes, metasRes] = await Promise.all([
+          axios.get(`${API_URL}/api/auth/tasklist`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_URL}/api/auth/phraseslist`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_URL}/api/auth/goallist`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+      
+        setTareas(tareasRes.data);
+        setFrases(frasesRes.data);
+        setMetas(metasRes.data);
+      
+        console.log(tareasRes.data, 'tareas del usuario');
+      
+        // Manejo de notificación
+        const latestTask = tareasRes.data[0];
+        const currentDate = new Date();
+        const taskDate = new Date(latestTask?.created_at);
+        const isTaskIncomplete = !latestTask?.complete;
+        const taskNotified = localStorage.getItem("taskNotified") === "true";
+      
+        if (isTaskIncomplete && taskDate < currentDate && taskNotified) {
+          setShowAlert(true);
+          localStorage.setItem("taskNotified", "false");
+        
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 30000);
+        } else {
+          setShowAlert(false); // Aseguramos que la alerta se oculte si no se cumple la condición
+        }
+      } catch (error: any) {
+        console.error("Error al obtener los datos:", error);
+        setErrors(error.response?.data.errors || { general: "Error inesperado. Comunícalo al programador." });
+      }
+    };
+  
+    fetchData();
+  }, [token]);
+
+// Manejamos la notificación en otro useEffect independiente
   useEffect(() => {
     const currentDate = new Date();
     const hours = currentDate.getHours();
     let currentPeriod = '';
-  
+
     if (hours >= 0 && hours < 8) {
       console.log('Periodo: morning');
       currentPeriod = 'morning';
-    } else if (hours >= 8 && hours < 18) {  // Cambiamos el límite de la tarde
+    } else if (hours >= 8 && hours < 18) {
       console.log('Periodo: afternoon');
       currentPeriod = 'afternoon';
     } else {
-      console.log('Periodo: night');  // Ahora la noche empieza a las 15:00
+      console.log('Periodo: night');
       currentPeriod = 'night';
     }
-  
+
     const lastNotifiedPeriod = localStorage.getItem("lastNotifiedPeriod");
-    // const taskNotified = localStorage.getItem("taskNotified");
-    console.log(lastNotifiedPeriod, 'ultimo periodo notificado')
+    console.log(lastNotifiedPeriod, 'último periodo notificado');
 
     if (lastNotifiedPeriod !== currentPeriod) {
       console.log('🚀 Se activará la notificación');
@@ -88,103 +130,6 @@ const Home = () => {
       localStorage.setItem("lastNotifiedPeriod", currentPeriod);
     }
   }, []);
-  
-  // estado para saber cuando mostrar la Notification
-  const [showAlert, setShowAlert] = useState(false);
-  // useEffect para mostrar la ultima tarea en la seccion de home en Tareas
-  useEffect(() => {
-    const fetchTareas = async () => {
-      try {
-        const API_URL = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${API_URL}/api/auth/tasklist`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'User-Id': userId,
-          }
-        });
-        const latestTask = response.data[0]; 
-        setTareas(response.data); // Guardamos las tareas en el estado
-        console.log(response.data, 'tareas del usuario')
-        
-        const currentDate = new Date();
-        const taskDate = new Date(latestTask?.created_at);
-        const isTaskIncomplete = !latestTask?.complete;
-
-        const taskNotified = localStorage.getItem("taskNotified") === "true"; 
-
-        if (isTaskIncomplete && taskDate < currentDate && taskNotified) {
-          setShowAlert(true);
-          localStorage.setItem("taskNotified", "false");
-          console.log(taskNotified, 'entro donde pone la notificacion'); 
-
-          // Remove alert after 30s
-          setTimeout(() => {
-            setShowAlert(false);
-          }, 30000);
-        }
-
-      } catch (error: any) {
-        console.error("Error al obtener las tareas:", error);
-        if (error.response?.data.errors) {
-          setErrors(error.response.data.errors); // Guardamos el error específico
-      } else {
-          setErrors({ general: "Error inesperado. Comunícalo al programador." });
-      }
-      }
-    };
-  
-    fetchTareas();
-  }, [userId, token]); // Se ejecuta cuando cambian userId o token
-
-
-  // useEffect para mostrar la ultima frase en la seccion de home en Frases
-  useEffect(() => {
-    const fetchFrases = async () => {
-      try {
-        const API_URL = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${API_URL}/api/auth/phraseslist`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'User-Id': userId,
-          }
-        });
-        setFrases(response.data); // Guardamos las tareas en el estado
-      } catch (error: any) {
-        console.error("Error al obtener las tareas:", error);
-        if (error.response?.data.errors) {
-          setErrors(error.response.data.errors); // Guardamos el error específico
-      } else {
-          setErrors({ general: "Error inesperado. Comunícalo al programador." });
-      }
-      }
-    };
-  
-    fetchFrases();
-  }, [userId, token]); 
-
-   // useEffect para mostrar la ultima Meta en la seccion de home en Metas
-   useEffect(() => {
-    const fetchMetas = async () => {
-      try {
-        const API_URL = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${API_URL}/api/auth/goallist`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'User-Id': userId,
-          }
-        });
-        setMetas(response.data); // Guardamos las tareas en el estado
-      } catch (error: any) {
-        if (error.response?.data.errors) {
-          setErrors(error.response.data.errors); // Guardamos el error específico
-      } else {
-          setErrors({ general: "Error inesperado. Comunícalo al programador." });
-      }
-      }
-    };
-  
-    fetchMetas();
-  }, [userId, token]); 
 
 
    // Función para actualizar la tarea en tiempo real

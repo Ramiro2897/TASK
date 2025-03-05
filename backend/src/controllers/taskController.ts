@@ -2,7 +2,13 @@ import { Request, Response } from 'express';
 import { pool } from '../index';  // Importa la conexión desde index.ts
 
 export const createTask = async (req: Request, res: Response): Promise<Response> => {
-  const { task, startDate, endDate, category, priority, userId } = req.body;
+  const { task, startDate, endDate, category, priority } = req.body;
+
+  // Verificar si el usuario está autenticado
+  const user = (req as any).user;
+  if (!user) {
+    return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+  }
 
   // Obtener la fecha actual en formato YYYY-MM-DD
   const today = new Date().toLocaleDateString('es-CO', {
@@ -12,12 +18,6 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
   }).split('/').reverse().join('-');
   
 
-  if (!userId) {
-    console.log('Datos incompletos - userId:', userId);
-    return res.status(400).json({
-      errors: { task_name: 'Error inesperado.' }
-    });
-  }
 
   // validamos el nombre de la tarea
   if (task.length > 40) {
@@ -77,7 +77,7 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
     const result = await pool.query(
       `INSERT INTO tasks (task_name, start_date, end_date, category, priority, complete, created_at, updated_at, user_id)
        VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7) RETURNING *`,
-      [task, startDate, endDate, category, priority, false, userId]  // Aquí pasamos el userId como parámetro
+      [task, startDate, endDate, category, priority, false, user.id]  // Aquí pasamos el userId como parámetro
     );
 
     const newTask = result.rows[0];

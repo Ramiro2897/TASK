@@ -20,10 +20,7 @@ const ModalPhrases: React.FC<ModalPhrasesProps> = ({ isOpen, onClose, onSubmit, 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const user = localStorage.getItem('user');
-    const userId = user ? JSON.parse(user).id : ''; 
-
-    const phraseData = { phrase, author, userId };
+    const phraseData = { phrase, author};
     
     const token = localStorage.getItem('token');
     if (!token) return;

@@ -24,10 +24,8 @@ const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit, onTask
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
-      const user = localStorage.getItem('user');
-      const userId = user ? JSON.parse(user).id : ''; 
       // Crear el objeto con los datos
-      const taskData = { task, startDate, endDate, category, priority, userId };
+      const taskData = { task, startDate, endDate, category, priority };
 
       const token = localStorage.getItem('token');
 

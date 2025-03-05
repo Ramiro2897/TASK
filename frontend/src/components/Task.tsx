@@ -18,70 +18,58 @@ const Task = () => {
   const [newDate, setNewDate] = useState("");
   const [priority, setPriority] = useState(selectedTask?.priority || "low");  // low por defecto si es null o undefined
 
-
-  // permite asignarle el valor de la fecha a selectedTask
   useEffect(() => {
-    if (selectedTask?.date) {
-      setNewDate(selectedTask.date.split('T')[0]); // Establece la fecha si está disponible
-    }
-  }, [selectedTask]); //ejecuta cada vez que selectedTask cambia
-
-  // permite asignarle el valor de seleccionar el tipo de prioridad a selectedTask
-  useEffect(() => {
-    if (selectedTask?.priority) {
-      const priorityInSpanish = selectedTask.priority === "high" ? "alta" 
-                             : selectedTask.priority === "medium" ? "media" 
-                             : "baja"; 
-      setPriority(priorityInSpanish);
-    }
-  }, [selectedTask]);
-  
-  // obtener las teras del usuario
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    const userId = user ? JSON.parse(user).id : "";
     const token = localStorage.getItem("token");
-    
+  
+    // 1️⃣ Asignar fecha y prioridad si selectedTask cambia
+    if (selectedTask) {
+      if (selectedTask.date) {
+        setNewDate(selectedTask.date.split('T')[0]); // Establece la fecha si está disponible
+      }
+  
+      if (selectedTask.priority) {
+        const priorityInSpanish =
+          selectedTask.priority === "high" ? "alta" :
+          selectedTask.priority === "medium" ? "media" :
+          "baja";
+        setPriority(priorityInSpanish);
+      }
+    }
+  
+    // 2️⃣ Obtener las tareas del usuario
     const loadTasks = async () => {
       try {
         const API_URL = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${API_URL}/api/auth/loadTasks`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "User-Id": userId,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-
+  
         if (response.data.length === 0) {
-          setErrors({ message: "Parece que tu lista está vacía"});
+          setErrors({ message: "Parece que tu lista está vacía" });
         } else {
           setErrors({ general: undefined }); // Si hay tareas, limpiamos el mensaje de error
         }
         setTasks(response.data);
       } catch (error: any) {
-        if (error.response?.data.errors) {
-          setErrors(error.response.data.errors);
-        } else {
-          setErrors({ general: "Error inesperado. Comunícalo al programador." });
-        }
+        setErrors(error.response?.data.errors || { general: "Error inesperado. Comunícalo al programador." });
       }
     };
-    loadTasks ();
-  }, []);
+  
+    loadTasks();
+  }, [selectedTask]); // Se ejecuta cada vez que cambia `selectedTask`
+  
+ 
 
   // funcion para hacer la busqueda de usuarios
   const handleSearch = async () => {
     try {
       const API_URL = import.meta.env.VITE_API_URL;
-      const user = localStorage.getItem("user");
-      const userId = user ? JSON.parse(user).id : "";
       const token = localStorage.getItem("token");
       setErrors({});
 
       const response = await axios.get(`${API_URL}/api/auth/searchTasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "User-Id": userId,
         },
         params: {
           query: searchTerm,
@@ -133,22 +121,18 @@ const Task = () => {
 
 
 
-  // Datos blobales del usuario para realizar acciones
-  const user = localStorage.getItem("user");
-  const userId = user ? JSON.parse(user).id : "";
+  // Datos globales del usuario para realizar acciones
   const token = localStorage.getItem("token");
 
   // funcion para actualizar las tareas a completa o viceversa
   const handleCheckboxChange = async (taskId: number, isChecked: boolean) => {
     try {
-      console.log('datosss', userId, token, taskId, isChecked)
       const API_URL = import.meta.env.VITE_API_URL;
       await axios.put(`${API_URL}/api/auth/updateTask`, 
         { complete: isChecked }, // Enviamos el nuevo estado de "complete"
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            "User-Id": userId,  
+            Authorization: `Bearer ${token}`,  
             "Task-Id": taskId, 
             "Complete": isChecked.toString()   
           }
@@ -188,7 +172,6 @@ const Task = () => {
       await axios.delete(`${API_URL}/api/auth/deleteTask`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "User-Id": userId,
           "Task-Id": selectedTask.id.toString(),
         }
       });
@@ -251,7 +234,6 @@ const Task = () => {
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "User-Id": userId,
         }
       });
       

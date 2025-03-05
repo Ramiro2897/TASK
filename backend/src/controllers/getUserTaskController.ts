@@ -3,20 +3,16 @@ import { pool } from '../index';  // Importamos la conexión a la base de datos
 
 export const getUserTasks = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const userId = req.headers['user-id']; // Extraemos el userId desde los headers
-
-    // console.log('userId de las tareas a consultar para el usuario:', userId);
-
-    if (!userId || userId === '') {
-      return res.status(400).json({
-        errors: { userId: 'El ID de usuario es obligatorio.' }
-      });
+    // Verificar si el usuario está autenticado
+    const user = (req as any).user;
+    if (!user) {
+      return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
     }
 
     // Hacer la consulta para obtener todas las tareas que no estén archivadas (archived = false)
     let result = await pool.query(
       'SELECT * FROM tasks WHERE user_id = $1 AND archived = false ORDER BY created_at DESC',
-      [userId]
+      [user.id]
     );
 
     // Si no hay tareas, buscamos las más recientes sin importar el estado de archivado
@@ -24,7 +20,7 @@ export const getUserTasks = async (req: Request, res: Response): Promise<Respons
       console.log('No se encontraron tareas recientes. Buscando las tareas más recientes disponibles...');
       result = await pool.query(
         'SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC LIMIT 5', // Limitamos a las 5 tareas más recientes
-        [userId]
+        [user.id]
       );
     }
 
