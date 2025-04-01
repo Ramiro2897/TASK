@@ -200,6 +200,12 @@ const Home = () => {
     navigate("/phrases");
   }
 
+   // funcion para llevar a las metas
+   const handleGoGoals = ()=>{
+    navigate("/goals");
+  }
+
+
   return (
     <div className={styles['home-container']}>
       {/* mostrar que tiene tareas pendientes */}
@@ -322,7 +328,7 @@ const Home = () => {
             {/* ✨ SECCIÓN DE METAS */}
             <div className={styles.card}>
               <h3>Metas</h3>
-              <div className={styles['list-container']}>
+              <div className={styles['list-container']} onClick={handleGoGoals}>
                 {metas.length > 0 ? (
                   <div className={styles['task-text']}>
                     <div className={styles['title-name']}>

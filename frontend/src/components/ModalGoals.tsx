@@ -96,7 +96,7 @@ const ModalGoals: React.FC<ModalGoalsProps> = ({ isOpen, onClose, onSubmit, onGo
           {errors.description && <div className={styles['errorContainer']}><span className={styles['errorTask']}>{errors.description}</span></div>}
           <input
             type="text"
-            placeholder="Descripción"
+            placeholder="Descripción (Plan de hábitos)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />

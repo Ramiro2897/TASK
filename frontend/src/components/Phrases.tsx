@@ -205,14 +205,6 @@ const Phrases = () =>{
       setSearchResults(prevResults => prevResults.map(phrases =>
         phrases.id === phraseId ? { ...phrases, favorite: isFavorite } : phrases
       ));
-  
-      // notificación de audio si lo deseas
-      // const playSound = () => {
-      //   const audio = new Audio('/favorite.mp3'); // Ruta del audio en tu proyecto
-      //   audio.volume = 0.3;
-      //   audio.play();
-      // };
-      // playSound();
     } catch (error: any) {
       setErrors(error.response?.data?.errors || { general: 'Error al actualizar el favorito.' });
       setTimeout(() => {
@@ -220,8 +212,6 @@ const Phrases = () =>{
       }, 5000);
     }
   };
-    
-
 
   // contenido para activar el modal al dejar presioanda la pantalla para eliminar
   let pressTimer: ReturnType<typeof setTimeout> | null = null;
@@ -242,11 +232,11 @@ const Phrases = () =>{
     }, 600); 
   };
 
-    const handleCloseModal = () => {
-      document.body.style.overflow = "auto";  
-      document.body.style.pointerEvents = "auto";  
-      setShowModal(false); 
-    };
+  const handleCloseModal = () => {
+    document.body.style.overflow = "auto";  
+    document.body.style.pointerEvents = "auto";  
+    setShowModal(false); 
+  };
     
   const handleMouseUp = () => {
     if (pressTimer) {
@@ -275,25 +265,19 @@ const Phrases = () =>{
     setIsSearching(false); 
   };
 
-  // funcion para ir a home
-  const navigate = useNavigate();
-  const handleGoHome = () => {
-    navigate("/Home"); // Navega a la página Home
-  };
-
-  // navegar hasta tareas
-  const handleGoTask = () => {
-    navigate("/tasks"); // Navega a la página Home
-  };
+   // funcion para nevegar entre componentes
+   const navigate = useNavigate();
+   const handleNavigation = (path: string) => {
+     navigate(path);
+   };
 
   return (
-
     <div className={styles['phrases-container']}>
     {/* 🔹 Modal para eliminar o actualizar frase*/}
     {showModal && selectedPhrase && (
         <div className={styles['modalOverlay']}>
           <div className={styles['modalContent']}>
-            <p>
+            <p className={styles['phraseTitle']}>
               {selectedPhrase.name.length > 225 
               ? selectedPhrase.name.slice(0, 225) + "..."
               : selectedPhrase.name}
@@ -324,7 +308,7 @@ const Phrases = () =>{
               onChange={(e) => setEditedName(e.target.value)} 
               className={styles['textarea-name']}
             />
-              <label className={styles['label-question']}>¿Modifcar a fecha de actualización?</label>
+              <label className={styles['label-question']}>¿Modificar la fecha de actualización?</label>
               <input 
                 type="date" 
                 value={newDate} 
@@ -351,13 +335,13 @@ const Phrases = () =>{
         </div>
         
         <div className={styles['options']}>
-          <div className={styles['options_list']}>
-            <FontAwesomeIcon icon={faArrowLeft} onClick={handleGoHome}/> Ir Home
+          <div className={styles['options_list']} onClick={() => handleNavigation("/Home")}>
+            <FontAwesomeIcon icon={faArrowLeft} /> Ir Home
           </div>
-          <div className={styles['options_list']}>
-            <FontAwesomeIcon icon={faListCheck} onClick={handleGoTask} /> Tareas
+          <div className={styles['options_list']} onClick={() => handleNavigation("/tasks")}>
+            <FontAwesomeIcon icon={faListCheck} /> Tareas
           </div>
-          <div className={styles['options_list']}>
+          <div className={styles['options_list']} onClick={() => handleNavigation("/goals")}>
             <FontAwesomeIcon icon={faBullseye} /> Metas
           </div>
         </div>
@@ -475,12 +459,7 @@ const Phrases = () =>{
             ))}
       </div>
 
-
-
     </div>
-
-  
-
 
   )
 

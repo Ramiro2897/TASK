@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { pool } from '../index';
+import { v4 as uuidv4 } from 'uuid';
 
 export const login = async (req: Request, res: Response): Promise<Response> => {
     const { username, password } = req.body;
@@ -28,6 +29,10 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
             return res.status(400).json({ errors: { password: 'Contraseña incorrecta' } });
         }
 
+        // Generar un nuevo UUID
+        const newUuid = uuidv4();
+        await pool.query('UPDATE users SET uuid = $1 WHERE id = $2', [newUuid, user.id]);
+
         // ⚠️ Asegurar que JWT_SECRET esté definido
         if (!process.env.JWT_SECRET) {
             console.error('FALTA LA VARIABLE JWT_SECRET');
@@ -36,7 +41,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
 
         // Generar token sin expiración
         const token = jwt.sign(
-            { id: user.id, username: user.username },
+            { id: user.id, username: user.username},
             process.env.JWT_SECRET as string
         );
 

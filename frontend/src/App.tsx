@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import RedirectIfAuthenticated from './components/Redirect';
 import RedirectRegister from './components/redirectRegister';
 import Phrases from './components/Phrases';
+import Goals from './components/Goals';
 
 function App() {
   return (
@@ -17,7 +18,6 @@ function App() {
         <Routes>
           {/* Ruta pública para iniciar sesión */}
           <Route path="/" element={<RedirectIfAuthenticated><Login /></RedirectIfAuthenticated>} />
-
           
           {/* Ruta pública para el registro */}
           <Route path="/register" element={<RedirectRegister><Register /></RedirectRegister>} />
@@ -30,6 +30,9 @@ function App() {
 
           {/* Ruta protegida para el Phrases, solo accesible si hay un token */}
           <Route path="/phrases" element={<ProtectedRoute><Phrases /></ProtectedRoute>} />
+
+          {/* Ruta protegida para el Goals, solo accesible si hay un token */}
+          <Route path="/goals" element={<ProtectedRoute><Goals /></ProtectedRoute>} />
 
           {/* Ruta protegida para el information, solo accesible si hay un token */}
           <Route path="/information" element={<ProtectedRoute><Information /></ProtectedRoute>} />

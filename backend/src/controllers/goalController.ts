@@ -76,15 +76,22 @@ export const createGoal = async (req: Request, res: Response): Promise<Response>
       errors: { unit: 'La unidad de la meta es obligatoria.' }
     });
   }
+  
+  const unitsWithInitialOne = [
+    "km", "kg", "horas", "minutos", "calorías", "COP", "dólares"
+  ];
+  
+  const currentValue = unitsWithInitialOne.includes(unit) ? 1 : 0;
 
   try {
     console.log('Validación exitosa, guardando meta...');
     // Insertar la meta en la base de datos
     const result = await pool.query(
-      `INSERT INTO goals (goal, description, start_date, end_date, unit, created_at, updated_at, user_id)
-       VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $6) RETURNING *`,
-      [goal, description, startDate, endDate, unit, user.id]
+      `INSERT INTO goals (goal, description, start_date, end_date, unit, current_value, created_at, updated_at, user_id)
+       VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7) RETURNING *`,
+      [goal, description, startDate, endDate, unit, currentValue, user.id]
     );
+    
 
     const newGoal = result.rows[0];
     return res.status(201).json({ message: 'Meta creada con éxito', goal: newGoal });

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { pool } from '../index';  // Importamos la conexión a la base de datos
-import { QueryResult } from 'pg'; // Importamos el tipo correcto para la consulta
+import { pool } from '../index';  
+import { QueryResult } from 'pg'; 
 
 export const updatePhrase = async (req: Request, res: Response): Promise<Response> => {
   try {

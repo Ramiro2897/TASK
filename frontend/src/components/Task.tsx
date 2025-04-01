@@ -58,7 +58,6 @@ const Task = () => {
     loadTasks();
   }, [selectedTask]); // Se ejecuta cada vez que cambia `selectedTask`
   
- 
 
   // funcion para hacer la busqueda de usuarios
   const handleSearch = async () => {
@@ -109,17 +108,11 @@ const Task = () => {
     return priorityMap[validPriority];
   };
 
-  // llevar a home -- boton de ir a home
+  // funcion para nevegar entre componentes
   const navigate = useNavigate();
-  const handleGoHome = () => {
-    navigate("/Home"); // Navega a la página Home
+  const handleNavigation = (path: string) => {
+    navigate(path);
   };
-
-  const handleGoPhrases = () => {
-    navigate("/phrases"); // Navega a la página frases
-  };
-
-
 
   // Datos globales del usuario para realizar acciones
   const token = localStorage.getItem("token");
@@ -314,7 +307,7 @@ const Task = () => {
     setShowEditModal(true);
     setShowModal(false);
   };
-  // funcion para cerrar el modal de editar
+  // funcion para cerrar el modal de actualizar
   const handleCloseEditModal = () => {
     setShowModal(false); //cerramos el modal de editar y eliminar
     setShowEditModal(false); 
@@ -342,7 +335,7 @@ const Task = () => {
      {showModal && selectedTask && (
         <div className={styles['modalOverlay']}>
           <div className={styles['modalContent']}>
-            <p>{selectedTask.name}</p>
+            <p className={styles['taskTitle']}>{selectedTask.name}</p>
             <p className={styles['question']}> ¿Qué quieres hacer?</p>
             <div className={styles['btn-options']}>
               <button onClick={handleOpenEditModal}>
@@ -363,7 +356,7 @@ const Task = () => {
       {showEditModal && selectedTask &&(
         <div className={styles['modalOverlay']}>
           <div className={styles['modalContent']}>
-            <p>{selectedTask.name}</p>
+            <p className={styles['taskTitle']}>{selectedTask.name}</p>
               <label>Fecha final:</label>
               <input 
                 type="date" 
@@ -401,13 +394,13 @@ const Task = () => {
           <h2>Tasly</h2>
         </div>
         <div className={styles['options']}>
-          <div className={styles['options_list']}>
-            <FontAwesomeIcon icon={faArrowLeft} onClick={handleGoHome}/> Ir Home
+          <div className={styles['options_list']} onClick={() => handleNavigation("/Home")}>
+            <FontAwesomeIcon icon={faArrowLeft} /> Ir Home
           </div>
           <div className={styles['options_list']}>
-            <FontAwesomeIcon icon={faQuoteLeft} onClick={handleGoPhrases} /> Frases
+            <FontAwesomeIcon icon={faQuoteLeft} onClick={() => handleNavigation("/phrases")} /> Frases
           </div>
-          <div className={styles['options_list']}>
+          <div className={styles['options_list']} onClick={() => handleNavigation("/goals")}>
             <FontAwesomeIcon icon={faBullseye} /> Metas
           </div>
         </div>
