@@ -9,38 +9,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchPhrases = void 0;
+exports.deleteGoal = void 0;
 const index_1 = require("../index"); // Importamos la conexión a la base de datos
-const searchPhrases = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteGoal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Verificar si el usuario está autenticado
         const user = req.user;
         if (!user) {
             return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
         }
-        const query = req.query.query; // Extraemos el término de búsqueda desde los query parameters
-        console.log('usuario id:', user.id, 'query:', query);
-        // Validamos si la cadena de búsqueda está vacía o contiene solo espacios en blanco
-        if (typeof query === 'string' && query.trim() === "") {
+        const goalId = Number(req.headers['goal-id']);
+        // console.log('datos al eliminar una meta', goalId, user.id);
+        // Validamos que el taskId y userId estén presentes
+        if (!goalId) {
             return res.status(400).json({
-                errors: { general: 'No se encontraron frases.' },
+                errors: { general: 'Fallo en el usuario.' }
             });
         }
-        // Hacer la consulta para buscar las tareas que coincidan con el término de búsqueda
-        const result = yield index_1.pool.query('SELECT * FROM phrases WHERE user_id = $1 AND phrase ILIKE $2 ORDER BY created_at DESC', [user.id, `%${query}%`]);
-        if (result.rows.length === 0) {
-            console.log('no hay frases');
-            return res.status(404).json({
-                errors: { general: 'No se encontraron frases.' }
-            });
+        // Verificamos que la tarea pertenezca al usuario antes de eliminarla
+        const taskResult = yield index_1.pool.query('SELECT * FROM goals WHERE id = $1 AND user_id = $2', [goalId, user.id]);
+        if (taskResult.rows.length === 0) {
+            return res.status(404).json({ errors: { general: 'Meta no encontrada o no pertenece al usuario.' } });
         }
-        return res.status(200).json(result.rows);
+        // Eliminamos la tarea
+        yield index_1.pool.query('DELETE FROM goals WHERE id = $1', [goalId]);
+        // Respondemos con un mensaje de éxito
+        return res.status(200).json({ message: 'Meta eliminada correctamente.' });
     }
     catch (error) {
-        console.error('Error al buscar frases:', error);
+        console.error('Error al eliminar la meta:', error);
         return res.status(500).json({
-            errors: { general: 'Error del servidor, intenta de nuevo más tarde.' }
+            errors: { server: 'Error al eliminar la meta.' }
         });
     }
 });
-exports.searchPhrases = searchPhrases;
+exports.deleteGoal = deleteGoal;

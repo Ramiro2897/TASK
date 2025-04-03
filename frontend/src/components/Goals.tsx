@@ -259,7 +259,7 @@ const Goals = () => {
 
       setTimeout(() => {
         handleClosePreviewModal();
-      }, 5000);   
+      }, 16000);   
   
     } catch (error: any) {
       setErrors(error.response?.data?.errors || { general: 'Error al actualizar la tarea.' });
@@ -345,6 +345,28 @@ const Goals = () => {
     if (value >= 70 && value < 95) return "#00B06E"; // Verde vibrante
     return "#0096FF"; // Azul más moderno
   };
+
+  // ejecutar audio una vez se completa la meta
+  useEffect(() => {
+    if (selectedGoalPreview) {
+      setNewValue(selectedGoalPreview.current_value);
+    }
+  }, [selectedGoalPreview]);
+  
+  useEffect(() => {
+    if (selectedGoalPreview?.current_value === 100) {
+      if (!sessionStorage.getItem(`goal_${selectedGoalPreview.id}_notified`)) {
+        const playSound = () => {
+          const audio = new Audio('/CompleteGoal.mp3'); 
+          audio.volume = 0.8;
+          audio.play();
+        };
+  
+        playSound();
+        sessionStorage.setItem(`goal_${selectedGoalPreview.id}_notified`, 'true');  
+      }
+    }
+  }, [selectedGoalPreview?.current_value]);
   
   return (
     <div className={styles['goals-container']}>
@@ -388,14 +410,14 @@ const Goals = () => {
                   <FontAwesomeIcon icon={faTimes} />Cerrar
                 </button>
               </div>
-              {errors.errorUpdate && <p className={styles['error-search']}> {errors.errorUpdate}</p>}
+              {errors.errorUpdate && <p className={styles['error-Update']}> {errors.errorUpdate}</p>}
           </div>
         </div>
       )}
 
       {/* 🔹 Modal para agregar avance a una meta */}
       {showAddPreviewModal && selectedGoalPreview &&(
-        <div className={styles['modalOverlayPreview']}>
+        <div key={selectedGoalPreview?.id} className={`${styles['modalOverlayPreview']} ${Number(selectedGoalPreview?.current_value) === 100 ? styles['goal-completed_modal'] : ''}`}>
           <div className={styles['modalContentPreview']}>
             <span>¿Qué tanto avanzaste?</span>
             <p className={styles['goalName']}>{selectedGoalPreview.name}</p>   
@@ -432,7 +454,7 @@ const Goals = () => {
                   <FontAwesomeIcon icon={faTimes} />Cerrar
                 </button>
               </div>
-              {errors.errorUpdate && <p className={styles['error-search']}> {errors.errorUpdate}</p>}
+              {errors.errorUpdate && <p className={styles['error-Update']}> {errors.errorUpdate}</p>}
           </div>
         </div>
       )}
@@ -462,7 +484,7 @@ const Goals = () => {
         <div className={styles['content-search']}>
           <input
             type="text"
-            placeholder="Buscar frase..."
+            placeholder="Buscar meta..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -492,7 +514,14 @@ const Goals = () => {
       <div className={styles['dashboard_goal']}>
         {searchResults.length > 0
           ? searchResults.map((goal) => (
-            <div key={goal.id} className={styles['goal-item']}>
+            <div
+              key={goal.id}
+              className={`
+                ${styles['goal-item']} 
+                ${Number(goal.current_value) === 100 ? styles['goal-completed'] : ''} 
+                ${(new Date(goal.end_date) < new Date() && Number(goal.current_value) < 100) ? styles['goal-expired'] : ''}
+              `}
+              >
                 <div className={styles['content-infoGoal']} onMouseDown={() => handleMouseDown(goal.id, goal.goal, goal.start_date, goal.description)} onMouseUp={handleMouseUp} 
                   onMouseLeave={handleMouseUp} onTouchStart={() => handleMouseDown(goal.id, goal.goal, goal.start_date, goal.description)} 
                   onTouchEnd={handleMouseUp} onTouchCancel={handleMouseUp}>
@@ -547,7 +576,14 @@ const Goals = () => {
             ))
           : goals.length > 0 &&
             goals.map((goal) => (
-              <div key={goal.id} className={styles['goal-item']}>
+              <div
+              key={goal.id}
+              className={`
+                ${styles['goal-item']} 
+                ${Number(goal.current_value) === 100 ? styles['goal-completed'] : ''} 
+                ${(new Date(goal.end_date) < new Date() && Number(goal.current_value) < 100) ? styles['goal-expired'] : ''}
+              `}
+              >
                 <div className={styles['content-infoGoal']} onMouseDown={() => handleMouseDown(goal.id, goal.goal, goal.start_date, goal.description)} onMouseUp={handleMouseUp} 
                   onMouseLeave={handleMouseUp} onTouchStart={() => handleMouseDown(goal.id, goal.goal, goal.start_date, goal.description)} 
                   onTouchEnd={handleMouseUp} onTouchCancel={handleMouseUp}>
@@ -576,7 +612,6 @@ const Goals = () => {
                         ></div>
                       </div>
                   </div>
-
 
                   <div className={styles['goal-date']}>
                     <div className={styles['content-date']}>

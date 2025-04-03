@@ -13,15 +13,14 @@ exports.getUserPhrases = void 0;
 const index_1 = require("../index"); // Importamos la conexión a la base de datos
 const getUserPhrases = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userId = req.headers['user-id']; // Extraemos el userId desde los headers
-        console.log('userId de las frases a consultar para el usuario:', userId);
-        if (!userId || userId === '') {
-            return res.status(400).json({
-                errors: { userId: 'El ID de usuario es obligatorio.' }
-            });
+        // Verificar si el usuario está autenticado
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
         }
+        console.log('userId de las frases a consultar para el usuario:', user.id);
         // Hacer la consulta para obtener todas las tareas que no estén archivadas (archived = false)
-        let result = yield index_1.pool.query('SELECT * FROM phrases WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
+        let result = yield index_1.pool.query('SELECT * FROM phrases WHERE user_id = $1 ORDER BY created_at DESC', [user.id]);
         // Si no hay frases
         if (result.rows.length === 0) {
             return res.status(404).json({

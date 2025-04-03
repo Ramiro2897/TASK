@@ -13,6 +13,11 @@ exports.updateTaskStatus = void 0;
 const index_1 = require("../index"); // Importamos la conexión a la base de datos
 const updateTaskStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // Verificar si el usuario está autenticado
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+        }
         const taskId = req.headers['task-id'];
         const complete = req.headers['complete'];
         const completeBool = complete === 'true'; // Esto convertirá "true" a true, y "false" a false

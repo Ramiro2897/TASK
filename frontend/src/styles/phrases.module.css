@@ -179,6 +179,7 @@ body{
 .error-container{
   width: 100%;
   height: 30px;
+  padding: 0 10px;
   color: #bbb;
   display: flex;
   align-items: center;
@@ -264,6 +265,10 @@ body{
   display: flex;
   flex-direction: column;
   gap: 10px;
+  user-select: none; 
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none;
 }
 
 .dashboard_phrase .phrase-name{
@@ -362,9 +367,10 @@ body{
 /* modal para eliminar, editar una frase */
 .modalOverlay {
   position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   align-items: flex-start; 
   justify-content: center;

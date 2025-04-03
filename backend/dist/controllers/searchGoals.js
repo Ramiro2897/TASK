@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchPhrases = void 0;
+exports.searchGoals = void 0;
 const index_1 = require("../index"); // Importamos la conexión a la base de datos
-const searchPhrases = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const searchGoals = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Verificar si el usuario está autenticado
         const user = req.user;
@@ -23,24 +23,24 @@ const searchPhrases = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         // Validamos si la cadena de búsqueda está vacía o contiene solo espacios en blanco
         if (typeof query === 'string' && query.trim() === "") {
             return res.status(400).json({
-                errors: { general: 'No se encontraron frases.' },
+                errors: { general: 'No se encontraron metas.' },
             });
         }
         // Hacer la consulta para buscar las tareas que coincidan con el término de búsqueda
-        const result = yield index_1.pool.query('SELECT * FROM phrases WHERE user_id = $1 AND phrase ILIKE $2 ORDER BY created_at DESC', [user.id, `%${query}%`]);
+        const result = yield index_1.pool.query('SELECT * FROM goals WHERE user_id = $1 AND goal ILIKE $2 ORDER BY created_at DESC', [user.id, `%${query}%`]);
         if (result.rows.length === 0) {
-            console.log('no hay frases');
+            console.log('no hay metas');
             return res.status(404).json({
-                errors: { general: 'No se encontraron frases.' }
+                errors: { general: 'No se encontraron metas.' }
             });
         }
         return res.status(200).json(result.rows);
     }
     catch (error) {
-        console.error('Error al buscar frases:', error);
+        console.error('Error al buscar metas:', error);
         return res.status(500).json({
             errors: { general: 'Error del servidor, intenta de nuevo más tarde.' }
         });
     }
 });
-exports.searchPhrases = searchPhrases;
+exports.searchGoals = searchGoals;

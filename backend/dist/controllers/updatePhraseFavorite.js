@@ -9,38 +9,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchPhrases = void 0;
+exports.updatePhraseFavorite = void 0;
 const index_1 = require("../index"); // Importamos la conexión a la base de datos
-const searchPhrases = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updatePhraseFavorite = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Verificar si el usuario está autenticado
         const user = req.user;
         if (!user) {
             return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
         }
-        const query = req.query.query; // Extraemos el término de búsqueda desde los query parameters
-        console.log('usuario id:', user.id, 'query:', query);
-        // Validamos si la cadena de búsqueda está vacía o contiene solo espacios en blanco
-        if (typeof query === 'string' && query.trim() === "") {
+        const phraseId = req.headers['phrase-id'];
+        const favorite = req.headers['favorite'];
+        console.log('datos de la frase para favorita', favorite, phraseId);
+        const favoriteBool = favorite === 'true'; // Convertimos "true" en true y "false" en false
+        // Validamos que phraseId y favoriteBool estén presentes y en el formato correcto
+        if (!phraseId || typeof favoriteBool !== 'boolean') {
             return res.status(400).json({
-                errors: { general: 'No se encontraron frases.' },
+                errors: { general: 'Error inesperado.' }
             });
         }
-        // Hacer la consulta para buscar las tareas que coincidan con el término de búsqueda
-        const result = yield index_1.pool.query('SELECT * FROM phrases WHERE user_id = $1 AND phrase ILIKE $2 ORDER BY created_at DESC', [user.id, `%${query}%`]);
+        // Realizamos la actualización en la base de datos
+        const result = yield index_1.pool.query('UPDATE phrases SET favorite = $1 WHERE id = $2 RETURNING *', [favoriteBool, phraseId]);
+        // Si no se encuentra la frase
         if (result.rows.length === 0) {
-            console.log('no hay frases');
-            return res.status(404).json({
-                errors: { general: 'No se encontraron frases.' }
-            });
+            return res.status(404).json({ errors: { general: 'Frase no encontrada.' } });
         }
-        return res.status(200).json(result.rows);
+        // Respondemos con la frase actualizada
+        return res.status(200).json({ phrase: result.rows[0] });
     }
     catch (error) {
-        console.error('Error al buscar frases:', error);
+        console.error('Error al actualizar el estado de favorito:', error);
         return res.status(500).json({
-            errors: { general: 'Error del servidor, intenta de nuevo más tarde.' }
+            errors: { server: 'Error al actualizar el estado de favorito.' }
         });
     }
 });
-exports.searchPhrases = searchPhrases;
+exports.updatePhraseFavorite = updatePhraseFavorite;

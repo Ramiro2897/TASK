@@ -4,8 +4,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-  backdrop-filter: blur(5px); /* Efecto de desenfoque */
+  background: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(5px); 
   display: flex;
   justify-content: center;
   align-items: center;

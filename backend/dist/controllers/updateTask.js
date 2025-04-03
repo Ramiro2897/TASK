@@ -14,23 +14,29 @@ const index_1 = require("../index"); // Importamos la conexión a la base de dat
 const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const { taskId, updatedDate, updatedPriority } = req.body;
-        const userId = req.headers['user-id'];
+        // Verificar si el usuario está autenticado
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+        }
+        const { updatedDate, updatedPriority } = req.body;
+        const taskId = Number(req.body.taskId);
+        const formattedUpdatedDate = new Date(updatedDate).toISOString().split('T')[0];
         // Validación de datos requeridos
-        if (!taskId || !userId || !updatedDate || !updatedPriority) {
+        if (!taskId || !formattedUpdatedDate || !updatedPriority) {
             return res.status(400).json({
                 errors: { errorUpdate: 'Faltan datos para actualizar la tarea.' }
             });
         }
         // Validación de fecha
         const today = new Date().toISOString().split('T')[0];
-        if (updatedDate < today) {
+        if (formattedUpdatedDate < today) {
             return res.status(400).json({
                 errors: { errorUpdate: 'Fecha de actualización pasada.' }
             });
         }
         // Verificamos si la tarea pertenece al usuario y si está completada
-        const taskResult = yield index_1.pool.query('SELECT complete FROM tasks WHERE id = $1 AND user_id = $2', [taskId, userId]);
+        const taskResult = yield index_1.pool.query('SELECT complete FROM tasks WHERE id = $1 AND user_id = $2', [taskId, user.id]);
         if (taskResult.rows.length === 0) {
             return res.status(404).json({ errors: { errorUpdate: 'La tarea no pertenece al usuario.' } });
         }
@@ -38,7 +44,7 @@ const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             return res.status(400).json({ errors: { errorUpdate: 'No puedes actualizar una tarea completada.' } });
         }
         // Actualización de la tarea
-        const updateResult = yield index_1.pool.query('UPDATE tasks SET end_date = $1, priority = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 AND user_id = $4', [updatedDate, updatedPriority, taskId, userId]);
+        const updateResult = yield index_1.pool.query('UPDATE tasks SET end_date = $1, priority = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 AND user_id = $4', [formattedUpdatedDate, updatedPriority, taskId, user.id]);
         // 🔹 Solución: Verificamos `rowCount ?? 0` para evitar errores de `null`
         if (((_a = updateResult.rowCount) !== null && _a !== void 0 ? _a : 0) > 0) {
             return res.status(200).json({ message: 'Tarea actualizada correctamente.' });

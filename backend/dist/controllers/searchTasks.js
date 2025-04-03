@@ -13,23 +13,21 @@ exports.searchTasks = void 0;
 const index_1 = require("../index"); // Importamos la conexión a la base de datos
 const searchTasks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userId = req.headers['user-id']; // Extraemos el userId desde los headers
-        const query = req.query.query; // Extraemos el término de búsqueda desde los query parameters
-        console.log('userId:', userId, 'query:', query);
+        // Verificar si el usuario está autenticado
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+        }
+        const query = String(req.query.query || "").trim(); // Extraemos el término de búsqueda desde los query parameters
+        console.log('usuario id:', user.id, 'query:', query);
         // Validamos si la cadena de búsqueda está vacía o contiene solo espacios en blanco
         if (typeof query === 'string' && query.trim() === "") {
             return res.status(400).json({
-                errors: { general: 'No se encontraron tareas.' },
-            });
-        }
-        // Validamos que el userId esté presente
-        if (!userId || userId === '') {
-            return res.status(400).json({
-                errors: { userId: 'El ID de usuario es obligatorio.' }
+                errors: { general: `No se encontraron tareas` },
             });
         }
         // Hacer la consulta para buscar las tareas que coincidan con el término de búsqueda
-        const result = yield index_1.pool.query('SELECT * FROM tasks WHERE user_id = $1 AND task_name ILIKE $2 ORDER BY created_at DESC', [userId, `%${query}%`]);
+        const result = yield index_1.pool.query('SELECT * FROM tasks WHERE user_id = $1 AND task_name ILIKE $2 ORDER BY created_at DESC LIMIT 50', [user.id, `%${query}%`]);
         if (result.rows.length === 0) {
             console.log('no hay tareasssss');
             return res.status(404).json({

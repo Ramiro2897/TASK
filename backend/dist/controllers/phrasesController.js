@@ -12,14 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPhrase = void 0;
 const index_1 = require("../index"); // Importa la conexión desde index.ts
 const createPhrase = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { phrase, userId, author } = req.body;
-    console.log('Datos recibidos:', req.body);
-    if (!userId) {
-        console.log('Error: userId es obligatorio.');
-        return res.status(400).json({
-            errors: { userId: 'Error inesperado.' }
-        });
+    // Verificar si el usuario está autenticado
+    const user = req.user;
+    if (!user) {
+        return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
     }
+    const { phrase, author } = req.body;
+    console.log('Datos recibidos:', req.body);
     if (!phrase || phrase.trim() === '') {
         console.log('Error: La frase no puede estar vacía.');
         return res.status(400).json({
@@ -44,7 +43,7 @@ const createPhrase = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         console.log('Guardando frase en la base de datos...');
         const result = yield index_1.pool.query(`INSERT INTO phrases (phrase, author, created_at, user_id)
-       VALUES ($1, $2, CURRENT_TIMESTAMP, $3) RETURNING *`, [phrase, author, userId]);
+       VALUES ($1, $2, CURRENT_TIMESTAMP, $3) RETURNING *`, [phrase, author, user.id]);
         const newPhrase = result.rows[0];
         return res.status(201).json({ message: 'Frase creada con éxito', phrase: newPhrase });
     }

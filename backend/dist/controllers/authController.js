@@ -16,6 +16,7 @@ exports.login = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const index_1 = require("../index");
+const uuid_1 = require("uuid");
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     // Validaciones de entrada
@@ -35,6 +36,9 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!isMatch) {
             return res.status(400).json({ errors: { password: 'Contraseña incorrecta' } });
         }
+        // Generar un nuevo UUID
+        const newUuid = (0, uuid_1.v4)();
+        yield index_1.pool.query('UPDATE users SET uuid = $1 WHERE id = $2', [newUuid, user.id]);
         // ⚠️ Asegurar que JWT_SECRET esté definido
         if (!process.env.JWT_SECRET) {
             console.error('FALTA LA VARIABLE JWT_SECRET');

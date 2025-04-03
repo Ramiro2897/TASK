@@ -10,35 +10,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updatePhrase = void 0;
-const index_1 = require("../index"); // Importamos la conexión a la base de datos
+const index_1 = require("../index");
 const updatePhrase = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const { taskId, updatedDate, editedName } = req.body;
-        const userId = req.headers['user-id'];
-        // Validación de datos requeridos
-        if (!taskId || !userId || !updatedDate || !editedName) {
+        // 🔹 Verificar si el usuario está autenticado y obtener su ID del token
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+        }
+        // 🔹 Extraemos los datos del cuerpo de la petición
+        const { phraseId, updatedDate, editedName } = req.body;
+        console.log('datos de la frase', phraseId, updatedDate, editedName);
+        // 🔹 Validación de datos requeridos
+        if (!phraseId || !updatedDate || !editedName) {
             return res.status(400).json({
                 errors: { errorUpdate: 'Faltan datos para actualizar la frase.' }
             });
         }
-        // Validación de fecha
+        // 🔹 Validación de fecha (convertimos `updatedDate` al mismo formato para evitar errores)
         const today = new Date().toISOString().split('T')[0];
-        if (updatedDate < today) {
+        const formattedDate = new Date(updatedDate).toISOString().split('T')[0];
+        if (formattedDate < today) {
             return res.status(400).json({
                 errors: { errorUpdate: 'Fecha de actualización pasada.' }
             });
         }
-        // Verificamos si la frase pertenece al usuario y si está completada
-        const phraseResult = yield index_1.pool.query('SELECT id FROM phrases WHERE id = $1 AND user_id = $2', [taskId, userId]);
+        // 🔹 Verificamos si la frase pertenece al usuario
+        const phraseResult = yield index_1.pool.query('SELECT id FROM phrases WHERE id = $1 AND user_id = $2', [phraseId, user.id]);
         if (phraseResult.rows.length === 0) {
             return res.status(404).json({ errors: { errorUpdate: 'La frase no pertenece al usuario.' } });
         }
-        // Actualización de la frase
-        const updateResult = yield index_1.pool.query('UPDATE phrases SET created_at = $1, phrase = $2 WHERE id = $3 AND user_id = $4', [updatedDate, editedName, taskId, userId]);
-        // 🔹 Solución: Verificamos `rowCount ?? 0` para evitar errores de `null`
+        // 🔹 Actualización de la frase
+        const updateResult = yield index_1.pool.query('UPDATE phrases SET created_at = $1, phrase = $2 WHERE id = $3 AND user_id = $4 RETURNING *', [updatedDate, editedName, phraseId, user.id]);
+        // 🔹 Verificamos si se actualizó correctamente
         if (((_a = updateResult.rowCount) !== null && _a !== void 0 ? _a : 0) > 0) {
-            return res.status(200).json({ message: 'Frase actualizada correctamente.' });
+            return res.status(200).json({ message: 'Frase actualizada correctamente.', updatedPhrase: updateResult.rows[0] });
         }
         return res.status(400).json({
             errors: { errorUpdate: 'No se pudo actualizar la frase, verifica los datos.' }

@@ -152,7 +152,7 @@ body{
 }
 
 .ssearch_goals .content-search input::placeholder{
-  color: #ccc;
+  color: #f2f2f2;
 }
 
 .search_goals .content-search button{
@@ -170,7 +170,7 @@ body{
   width: 100%;
   font-size: 1.5rem;
   color: #ccc;
-  margin-top: 50px;
+  margin: 20px 0;
   text-align: center;
   font-weight: bolder;
 }
@@ -179,11 +179,13 @@ body{
 .error-container{
   width: 100%;
   height: 30px;
+  padding: 0 10px;
   color: #bbb;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 .atomic_habits {
@@ -279,8 +281,8 @@ body{
 
 /* estilos para las metas */
 .goals-container .dashboard_goal {
-  column-count: auto; /* Se adapta dinámicamente */
-  column-width: 220px; /* Define un ancho mínimo para las columnas */
+  column-count: auto;
+  column-width: 220px; 
   column-gap: 10px;
   max-width: 900px;
   margin: 0 auto;
@@ -304,6 +306,92 @@ body{
   margin: 5px 0;
   transition: all 0.3s ease-in-out;
 }
+
+.goal-completed {
+  box-shadow: inset 0 0 10px #945E00;
+  animation: pulse-shadow 1.5s infinite alternate ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Generar múltiples caritas */
+.goal-completed::before {
+  content: '🔥';
+  right: 10px;
+  position: absolute;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Sombra interna pulsante */
+@keyframes pulse-shadow {
+  0% {
+    box-shadow: inset 0 0 10px #945e009a;
+  }
+  100% {
+    box-shadow: inset 0 0 20px #945e0056;
+  }
+}
+
+@keyframes pulse-shadow-two{
+  0% {
+    box-shadow: inset 0 0 10px #025951;
+  }
+  100% {
+    box-shadow: inset 0 0 20px #025950a4;
+  }
+}
+
+.goal-completed_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse-shadow-two 1.5s infinite alternate ease-in-out;
+}
+
+.goal-completed_modal::before {
+  content: '¡Meta completada! 🎉';
+  right: 10px;
+  bottom: 10px;
+  position: absolute;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  animation: emoji-fall 4s linear infinite;
+  background-color: #034159d0;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* tarea expirada */
+.goal-expired {
+  opacity: 0.5; 
+  pointer-events: none; 
+  filter: grayscale(80%); 
+  position: relative;
+  cursor: not-allowed; 
+}
+
+.goal-expired::before {
+  content: "Incumplida";
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: #f2f2f2;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 0 0 0 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 
 .goals-container .dashboard_goal .goal-item:hover{
   background: #bbabab28;
@@ -391,7 +479,7 @@ body{
 /* Barra de progreso con animación lenta */
 .goal-item .progress {
   height: 100%;
-  transition: width 3s ease-in-out; /* Ajuste para animación más lenta y fluida */
+  transition: width 6s ease-in-out; 
   border-radius: 2px;
   position: relative;
   display: flex;
@@ -402,7 +490,7 @@ body{
   color: white;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  white-space: nowrap; /* Esto asegura que el contenido no se divida en varias líneas */
+  white-space: nowrap; 
   overflow: hidden;
 }
 
@@ -417,7 +505,7 @@ body{
   top: 50%;
   transform: translateY(-50%);
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-  white-space: nowrap; /* Previene que el símbolo % salte a una nueva línea */
+  white-space: nowrap; 
   overflow: hidden; 
 }
 
@@ -480,6 +568,7 @@ body{
 /* modal para eliminar, editar una tarea */
 .modalOverlay {
   position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -612,10 +701,12 @@ body{
 }
 
 /* estilo para el modal de actualizar */
-.error-search{
+.error-Update{
   width: 100%;
+  height: 20px;
   font-size: .8rem !important;
   color: #F2F2F2;
+  font-style: italic;
   font-weight: 100 !important;
   border-radius: 5px;
   text-align: center;
@@ -690,10 +781,12 @@ body{
 
 .modalOverlayPreview .modalContentPreview .inputAdvance::-webkit-outer-spin-button,
 .modalOverlayPreview .modalContentPreview .inputAdvance::-webkit-inner-spin-button {
-  height: 25px; 
-  width: 25px;   
+  height: 35px; 
+  width: 35px;   
   border: none;
   cursor: pointer;
+  margin: 10px;  
+  padding: 0 5px;
 }
 
 /* Para Firefox, se eliminan los botones de incremento/decremento */
@@ -744,7 +837,7 @@ body{
 /* Barra de progreso con animación lenta */
 .modalOverlayPreview .modalContentPreview .progress {
   height: 100%;
-  transition: width 3s ease-in-out; /* Ajuste para animación más lenta y fluida */
+  transition: width 6s ease-in-out; /* Ajuste para animación más lenta y fluida */
   border-radius: 2px;
   position: relative;
   display: flex;
@@ -769,6 +862,7 @@ body{
   transform: translateY(-50%);
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
+
 
 /* media queries pantallas inferiores a 768px */
 @media (max-width: 768px) {

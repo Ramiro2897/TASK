@@ -8,14 +8,11 @@
 .home-container {
   width: 100%;
   max-width: 800px;
-  background: #998d8d28;
+  background: rgba(0, 0, 0, 0.027); 
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   transition: all 0.3s ease-in-out; 
-  margin: 20px 0;
 }
 
 .home-container h2 {
@@ -82,7 +79,23 @@
 em {
   display: block;
   font-size: 1rem;
-  color: #F29F05;
+  color: #cccccc88;
   text-align: center;
   margin-top: 15px;
 }
+
+em strong {
+  color: #f2f2f27a; 
+  font-weight: bold;
+}
+
+em a {
+  color: #ffaa00; /* Color llamativo para el enlace */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+em a:hover {
+  text-decoration: underline;
+}
+

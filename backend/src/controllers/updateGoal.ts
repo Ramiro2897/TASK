@@ -9,8 +9,6 @@ export const updateGoal = async (req: Request, res: Response): Promise<Response>
     if (!user) {
       return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
     }
-
-    // 🔹 Extraemos los datos del cuerpo de la petición
     const { goalId, editedDescription } = req.body;
     // console.log('datos de la frase', goalId, editedDescription);
 
@@ -57,30 +55,35 @@ export const updateGoal = async (req: Request, res: Response): Promise<Response>
 export const advanceGoal = async (req: Request, res: Response) => {
   try {
     const { goalId, newValue } = req.body;
-    // console.log('lo que llega cuando entra', goalId, newValue);
 
-    // Validaciones
     if (!goalId || !newValue) {
-      return res.status(400).json({ errors: { general: "Faltan datos requeridos." } });
+      return res.status(400).json({ errors: { errorUpdate: "Faltan datos requeridos." } });
     }
 
     const numericValue = Number(newValue);
 
     if (isNaN(numericValue) || numericValue < 1 || numericValue > 100) {
-      return res.status(400).json({ errors: { general: "El valor debe ser un número entre 1 y 100." } });
+      return res.status(400).json({ errors: { errorUpdate: "Ingreso u valor de 1 a 100" } });
     }
 
-    // Obtener el valor actual de la meta
-    const { rows } = await pool.query("SELECT current_value FROM goals WHERE id = $1", [goalId]);
+    // Obtener el valor actual y la fecha de finalización de la meta
+    const { rows } = await pool.query("SELECT current_value, end_date FROM goals WHERE id = $1", [goalId]);
 
     if (rows.length === 0) {
-      return res.status(404).json({ errors: { general: "Meta no encontrada." } });
+      return res.status(404).json({ errors: { errorUpdate: "Meta no encontrada." } });
     }
 
     const currentValue = Number(rows[0].current_value);
+    const endDate = new Date(rows[0].end_date);
+    const today = new Date();
+
+    // Comparar la fecha de finalización con la fecha actual
+    if (endDate < today) {
+      return res.status(400).json({ errors: { errorUpdate: "No puedes avanzar, meta vencida." } });
+    }
 
     if (numericValue < currentValue) {
-      return res.status(400).json({ errors: { general: "El avance no puede ser menor al valor actual." } });
+      return res.status(400).json({ errors: { errorUpdate: "El avance no puede retroceder." } });
     }
 
     // Actualizar el valor de la meta

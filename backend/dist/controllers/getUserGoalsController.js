@@ -9,24 +9,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTasks = void 0;
-const index_1 = require("../index"); // Importamos la conexión a la base de datos
-const getTasks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getUserGoals = void 0;
+const index_1 = require("../index");
+const getUserGoals = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Verificar si el usuario está autenticado
         const user = req.user;
         if (!user) {
             return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
         }
-        const result = yield index_1.pool.query('SELECT id, task_name, complete, created_at FROM tasks WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1', [user.id]);
-        // console.log('Tareas obtenidas de la base de datos:', result.rows); 
+        // console.log('userId de las metas a consultar para el usuario:', user.id);
+        // Hacer la consulta para obtener todas las tareas que no estén archivadas (archived = false)
+        let result = yield index_1.pool.query('SELECT * FROM goals WHERE user_id = $1 ORDER BY created_at DESC', [user.id]);
+        // Si no hay frases
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                errors: { message: 'No se encontraron metas.' }
+            });
+        }
         return res.status(200).json(result.rows);
     }
     catch (error) {
-        console.error('Error al obtener las tareas:', error);
+        console.error('Error al obtener las metas:', error);
         return res.status(500).json({
-            errors: { server: 'Error al obtener las tareas.' }
+            errors: { general: 'Error del servidor, intenta de nuevo más tarde.' }
         });
     }
 });
-exports.getTasks = getTasks;
+exports.getUserGoals = getUserGoals;

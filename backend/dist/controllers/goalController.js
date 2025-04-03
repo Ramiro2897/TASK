@@ -12,7 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createGoal = void 0;
 const index_1 = require("../index"); // Importa la conexión desde index.ts
 const createGoal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { goal, description, startDate, endDate, unit, userId } = req.body;
+    // Verificar si el usuario está autenticado
+    const user = req.user;
+    if (!user) {
+        return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+    }
+    const { goal, description, startDate, endDate, unit } = req.body;
     console.log('Datos recibidos:', req.body);
     // Obtener la fecha actual en formato YYYY-MM-DD en la zona horaria de Colombia
     const today = new Date().toLocaleDateString('es-CO', {
@@ -21,16 +26,22 @@ const createGoal = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         day: '2-digit',
     }).split('/').reverse().join('-');
     // console.log('Fecha actual en Colombia:', today);
-    if (!userId) {
-        console.log('Error: userId no proporcionado');
-        return res.status(400).json({
-            errors: { userId: 'El ID del usuario es obligatorio.' }
-        });
-    }
     if (!goal || goal.trim() === '') {
         console.log('Error: El nombre de la meta está vacío');
         return res.status(400).json({
             errors: { goal: 'El nombre de la meta no puede estar vacío.' }
+        });
+    }
+    if (goal.length > 35) {
+        console.log('Error: El nombre de la meta no puede superar los 35 caracteres');
+        return res.status(400).json({
+            errors: { goal: 'Nombre de la meta extenso.' }
+        });
+    }
+    if (description.length > 200) {
+        console.log('Error: La descripción no puede superar los 200 caracteres');
+        return res.status(400).json({
+            errors: { description: 'La descripción es muy extensa.' }
         });
     }
     if (!startDate || !endDate) {
@@ -62,11 +73,15 @@ const createGoal = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             errors: { unit: 'La unidad de la meta es obligatoria.' }
         });
     }
+    const unitsWithInitialOne = [
+        "km", "kg", "horas", "minutos", "calorías", "COP", "dólares"
+    ];
+    const currentValue = unitsWithInitialOne.includes(unit) ? 1 : 0;
     try {
         console.log('Validación exitosa, guardando meta...');
         // Insertar la meta en la base de datos
-        const result = yield index_1.pool.query(`INSERT INTO goals (goal, description, start_date, end_date, unit, created_at, updated_at, user_id)
-       VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $6) RETURNING *`, [goal, description, startDate, endDate, unit, userId]);
+        const result = yield index_1.pool.query(`INSERT INTO goals (goal, description, start_date, end_date, unit, current_value, created_at, updated_at, user_id)
+       VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7) RETURNING *`, [goal, description, startDate, endDate, unit, currentValue, user.id]);
         const newGoal = result.rows[0];
         return res.status(201).json({ message: 'Meta creada con éxito', goal: newGoal });
     }

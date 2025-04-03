@@ -62,5 +62,6 @@ app.get('*', (req, res) => {
 });
 // Iniciar el servidor
 app.listen(3000, '0.0.0.0', () => {
+    console.log(`🏠 Accede a la ruta principal en: http://localhost:${port}/Home`);
     console.log('🚀 Servidor backend corriendo en http://0.0.0.0:3000');
 });

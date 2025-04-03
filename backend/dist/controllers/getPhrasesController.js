@@ -13,15 +13,12 @@ exports.getPhrases = void 0;
 const index_1 = require("../index"); // Importamos la conexión a la base de datos
 const getPhrases = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userId = req.headers['user-id']; // Extraemos el userId desde los headers
-        // console.log('userId de las frases a consultar...:', userId);
-        if (!userId || userId === '') {
-            return res.status(400).json({
-                errors: { userId: 'El ID de usuario es obligatorio.' }
-            });
+        // Verificar si el usuario está autenticado
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
         }
-        // console.log(`Obteniendo frases del usuario: ${userId}`);
-        const result = yield index_1.pool.query('SELECT id, phrase, author, favorite, created_at FROM phrases WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1', [userId]);
+        const result = yield index_1.pool.query('SELECT id, phrase, author, favorite, created_at FROM phrases WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1', [user.id]);
         // console.log('Frase obtenida de la base de datos:', result.rows);
         return res.status(200).json(result.rows); // Enviamos solo la primera frase
     }

@@ -12,22 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTask = void 0;
 const index_1 = require("../index"); // Importa la conexión desde index.ts
 const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { task, startDate, endDate, category, priority, userId } = req.body;
-    console.log('entra aqui xd xd cd', task);
-    console.log('Datos recibidos:', req.body);
+    const { task, startDate, endDate, category, priority } = req.body;
+    // Verificar si el usuario está autenticado
+    const user = req.user;
+    if (!user) {
+        return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
+    }
     // Obtener la fecha actual en formato YYYY-MM-DD
     const today = new Date().toLocaleDateString('es-CO', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
     }).split('/').reverse().join('-');
-    console.log('fecha que necesitamos...', today);
-    if (!userId) {
-        console.log('Datos incompletos - userId:', userId);
-        return res.status(400).json({
-            errors: { task_name: 'Error inesperado.' }
-        });
-    }
     // validamos el nombre de la tarea
     if (task.length > 40) {
         console.log('Nombre de la tarea demasiado largo:', task);
@@ -76,7 +72,7 @@ const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         console.log('Paso la validación, guardando tarea...');
         // Insertamos la nueva tarea en la base de datos
         const result = yield index_1.pool.query(`INSERT INTO tasks (task_name, start_date, end_date, category, priority, complete, created_at, updated_at, user_id)
-       VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7) RETURNING *`, [task, startDate, endDate, category, priority, false, userId] // Aquí pasamos el userId como parámetro
+       VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7) RETURNING *`, [task, startDate, endDate, category, priority, false, user.id] // Aquí pasamos el userId como parámetro
         );
         const newTask = result.rows[0];
         return res.status(201).json({ message: 'Tarea creada con éxito', task: newTask });

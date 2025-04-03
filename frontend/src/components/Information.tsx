@@ -10,7 +10,7 @@ const Information = () => {
         Tasly es una aplicación web diseñada para ayudar a las personas a llevar un control intuitivo de sus tareas diarias y semanales.<br /><br />
 
         La idea surgió un día en el que me di cuenta de que no tenía un control adecuado de mis tareas. No quería depender de una aplicación de terceros, 
-        así que decidí crear la mía, ajustándola exactamente a mis necesidades y a cómo yo quería que funcionara. A medida que avanzaba en el desarrollo, 
+        así que decidí crear la mía, ajustándola exactamente a mis necesidades y a cómo quería que funcionara. A medida que avanzaba en el desarrollo, 
         se me ocurrían nuevas funcionalidades que podía integrar, y así fue evolucionando.<br /><br />
 
         Pero Tasly no es solo una app de tareas. También pensé en agregar frases inspiradoras, esas que puedas compartir con otros usuarios, aunque esto es 
@@ -35,7 +35,17 @@ const Information = () => {
         Tus sugerencias son bienvenidas. Si encuentras algo que no encaje contigo o crees que se puede mejorar, házmelo saber. Este proyecto está en constante evolución y tú también 
         puedes ser parte de su crecimiento...💡<br /><br />
 
-        <em>"La vida es como andar en bicicleta. Para mantener el equilibrio, debes seguir avanzando." - Albert Einstein</em></p>
+        <em>Nota: Algunas frases e ideas presentes en la aplicación están inspiradas en el libro  
+        <strong> Hábitos Atómicos </strong> de <strong> James Clear</strong>.  
+        Es una lectura altamente recomendada para quienes buscan <strong> mejorar sus hábitos </strong> y  
+        <strong> optimizar su vida diaria</strong>.  
+        Puedes obtener más información o adquirir el libro aquí: <a href="https://jamesclear.com/atomic-habits" target="_blank">[Enlace al libro]</a>  
+        <strong> “No subestimes el poder de los pequeños cambios. </strong>  
+        Un <strong> 1% de mejora cada día </strong> puede llevarte a <strong> resultados extraordinarios.”</strong> – James Clear.  
+        </em>
+        </p>
+
+        <em>“El primer principio es que no debes engañarte a ti mismo, y eres la persona más fácil de engañar.” – Richard Feynman</em>
 
         <div className={styles['contact']}>
           <h3>Contacto</h3>
