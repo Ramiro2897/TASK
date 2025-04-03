@@ -10,7 +10,7 @@ import archiveOldTasks from './controllers/taskArchiver';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = Number(process.env.PORT) || 5000;
 
 // Configuración de middleware
 app.use(cors());
@@ -56,7 +56,7 @@ app.get('*', (req, res) => {
 });
 
 // Iniciar el servidor
-app.listen(3000, '0.0.0.0', () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`🏠 Accede a la ruta principal en: http://localhost:${port}/Home`);
   console.log('🚀 Servidor backend corriendo en http://0.0.0.0:3000');
 });
