@@ -467,7 +467,9 @@ const Task = () => {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
+                          timeZone: 'UTC', // Esto asegura que se utilice la zona horaria UTC
                         }).replace('.', '')}
+
                       </p>
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
@@ -475,6 +477,7 @@ const Task = () => {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
+                          timeZone: 'UTC',
                         }).replace('.', '')}
                       </p>
                     </div>
