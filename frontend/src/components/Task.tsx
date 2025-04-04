@@ -321,15 +321,21 @@ const Task = () => {
   
   // funcion para validar si la tarea esta vencida y sin completar
   const isTaskExpired = (endDate: string, isComplete: boolean): boolean => {
-    if (isComplete) return false; // Si la tarea está completada, no se considera vencida
+    if (isComplete) return false;
   
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); 
+    const formatter = new Intl.DateTimeFormat('es-CO', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: 'America/Bogota', // aseguramos hora de Colombia
+    });
   
-    const taskEndDate = new Date(endDate);
-    taskEndDate.setHours(0, 0, 0, 0);
-    return taskEndDate < today; 
+    const todayStr = formatter.format(new Date());
+    const endStr = formatter.format(new Date(endDate));
+  
+    return endStr < todayStr;
   };
+  
 
   return (
 
@@ -466,22 +472,21 @@ const Task = () => {
                     <div className={styles['content-date']}>
                       <p title="fecha de inicio">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(task.created_at).toLocaleDateString('es-ES', {
+                        {new Intl.DateTimeFormat('es-ES', {
+                          timeZone: 'UTC',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
-                          timeZone: 'UTC', // Esto asegura que se utilice la zona horaria UTC
-                        }).replace('.', '')}
-
+                        }).format(new Date(task.start_date)).replace('.', '')}
                       </p>
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(task.end_date).toLocaleDateString('es-ES', {
+                        {new Intl.DateTimeFormat('es-ES', {
+                          timeZone: 'UTC',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
-                          timeZone: 'UTC',
-                        }).replace('.', '')}
+                        }).format(new Date(task.end_date)).replace('.', '')}
                       </p>
                     </div>
                   </div>
