@@ -522,7 +522,6 @@ const Task = () => {
                           month: 'short',
                           day: 'numeric',
                         }).format(new Date(task.start_date)).replace('.', '')}
-                        <p>{task.start_date} {task.end_date}</p>
                       </p>
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
