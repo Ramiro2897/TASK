@@ -323,18 +323,18 @@ const Task = () => {
   const isTaskExpired = (endDate: string, isComplete: boolean): boolean => {
     if (isComplete) return false;
   
-    const formatter = new Intl.DateTimeFormat('es-CO', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      timeZone: 'America/Bogota', // aseguramos hora de Colombia
-    });
+    // Convertimos las fechas al timezone de Colombia y las truncamos a medianoche
+    const now = new Date();
+    const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Bogota' }));
+    today.setHours(0, 0, 0, 0);
   
-    const todayStr = formatter.format(new Date());
-    const endStr = formatter.format(new Date(endDate));
+    const taskEnd = new Date(new Date(endDate).toLocaleString('en-US', { timeZone: 'America/Bogota' }));
+    taskEnd.setHours(0, 0, 0, 0);
   
-    return endStr < todayStr;
-  };
+    console.log(today, taskEnd, '← fechas truncadas Bogotá');
+  
+    return taskEnd < today;
+  };  
   
 
   return (
