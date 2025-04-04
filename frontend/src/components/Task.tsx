@@ -47,9 +47,10 @@ const Task = () => {
         if (response.data.length === 0) {
           setErrors({ message: "Parece que tu lista está vacía" });
         } else {
-          setErrors({ general: undefined }); // Si hay tareas, limpiamos el mensaje de error
+          setErrors({ general: undefined });
         }
         setTasks(response.data);
+        console.log(response.data, 'datos al cargar las tareas...');
       } catch (error: any) {
         setErrors(error.response?.data.errors || { general: "Error inesperado. Comunícalo al programador." });
       }
@@ -244,7 +245,7 @@ const Task = () => {
           : task
       );
 
-      console.log(response, 'respuesta con la fecha al actualizar')
+      console.log(response, 'respuesta con la fecha al actualizar');
       // Actualizamos ambos estados
       setSearchResults(updatedSearchResults);
       setTasks(updatedTasks);
@@ -515,19 +516,22 @@ const Task = () => {
                     <div className={styles['content-date']}>
                       <p title="fecha de inicio">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(task.created_at).toLocaleDateString('es-ES', {
+                        {new Intl.DateTimeFormat('es-ES', {
+                          timeZone: 'UTC',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
-                        }).replace('.', '')}
+                        }).format(new Date(task.start_date)).replace('.', '')}
+                        <p>{task.start_date} {task.end_date}</p>
                       </p>
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(task.end_date).toLocaleDateString('es-ES', {
+                        {new Intl.DateTimeFormat('es-ES', {
+                          timeZone: 'UTC',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
-                        }).replace('.', '')}
+                        }).format(new Date(task.end_date)).replace('.', '')}
                       </p>
                     </div>
                   </div>
