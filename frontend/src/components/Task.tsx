@@ -18,6 +18,8 @@ const Task = () => {
   const [newDate, setNewDate] = useState("");
   const [priority, setPriority] = useState(selectedTask?.priority || "low");  // low por defecto si es null o undefined
 
+
+  console.log(tasks, 'objeto tareas');
   useEffect(() => {
     const token = localStorage.getItem("token");
   
@@ -322,7 +324,8 @@ const Task = () => {
   // funcion para validar si la tarea esta vencida y sin completar
   const isTaskExpired = (endDate: string, isComplete: boolean): boolean => {
     if (isComplete) return false;
-  
+    
+    console.log(endDate);
     // Convertimos las fechas al timezone de Colombia y las truncamos a medianoche
     const now = new Date();
     const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Bogota' }));
@@ -330,6 +333,7 @@ const Task = () => {
   
     const taskEnd = new Date(endDate);
     taskEnd.setHours(0, 0, 0, 0);
+    console.log(today, 'fecha de hoy');
 
     console.log(today, taskEnd, '← fechas truncadas Bogotá');
   
