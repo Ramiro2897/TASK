@@ -519,7 +519,7 @@ const Goals = () => {
               className={`
                 ${styles['goal-item']} 
                 ${Number(goal.current_value) === 100 ? styles['goal-completed'] : ''} 
-                ${(new Date(goal.end_date) < new Date() && Number(goal.current_value) < 100) ? styles['goal-expired'] : ''}
+                ${(goal.end_date.split('T')[0] < new Date().toISOString().split('T')[0] && Number(goal.current_value) < 100) ? styles['goal-expired'] : ''}
               `}
               >
                 <div className={styles['content-infoGoal']} onMouseDown={() => handleMouseDown(goal.id, goal.goal, goal.start_date, goal.description)} onMouseUp={handleMouseUp} 
@@ -581,7 +581,7 @@ const Goals = () => {
               className={`
                 ${styles['goal-item']} 
                 ${Number(goal.current_value) === 100 ? styles['goal-completed'] : ''} 
-                ${(new Date(goal.end_date) < new Date() && Number(goal.current_value) < 100) ? styles['goal-expired'] : ''}
+                ${(goal.end_date.split('T')[0] < new Date().toISOString().split('T')[0] && Number(goal.current_value) < 100) ? styles['goal-expired'] : ''}
               `}
               >
                 <div className={styles['content-infoGoal']} onMouseDown={() => handleMouseDown(goal.id, goal.goal, goal.start_date, goal.description)} onMouseUp={handleMouseUp} 
@@ -617,19 +617,21 @@ const Goals = () => {
                     <div className={styles['content-date']}>
                       <p title="fecha de creación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(goal.start_date).toLocaleDateString('es-ES', {
+                        {new Intl.DateTimeFormat('es-ES', {
+                          timeZone: 'UTC',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
-                        }).replace('.', '')}
+                        }).format(new Date(goal.start_date)).replace('.', '')}
                       </p>
                       <p title="fecha de terminación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(goal.end_date).toLocaleDateString('es-ES', {
+                        {new Intl.DateTimeFormat('es-ES', {
+                          timeZone: 'UTC',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
-                        }).replace('.', '')}
+                        }).format(new Date(goal.end_date)).replace('.', '')}
                       </p>
                     </div>
                   </div>
