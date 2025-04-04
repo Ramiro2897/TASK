@@ -332,7 +332,6 @@ const Task = () => {
     today.setHours(0, 0, 0, 0);
   
     const taskEnd = new Date(endDate);
-    taskEnd.setHours(0, 0, 0, 0);
     console.log(today, 'fecha de hoy');
 
     console.log(today, taskEnd, '← fechas truncadas Bogotá');
