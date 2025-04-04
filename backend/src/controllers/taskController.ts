@@ -46,7 +46,7 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
   if (startDate < today) {
     console.log('Fecha de inicio en el pasado:', startDate);
     return res.status(400).json({
-      errors: { date: 'Fecha de inicio en el pasado.', startDate, today }
+      errors: { date: 'Fecha de inicio en el pasado.', today }
     });
   }
 
