@@ -328,9 +328,9 @@ const Task = () => {
     const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Bogota' }));
     today.setHours(0, 0, 0, 0);
   
-    const taskEnd = new Date(new Date(endDate).toLocaleString('en-US', { timeZone: 'America/Bogota' }));
+    const taskEnd = new Date(endDate);
     taskEnd.setHours(0, 0, 0, 0);
-  
+
     console.log(today, taskEnd, '← fechas truncadas Bogotá');
   
     return taskEnd < today;
