@@ -220,7 +220,7 @@ const Task = () => {
     try {
       const API_URL = import.meta.env.VITE_API_URL;
   
-      await axios.put(`${API_URL}/api/auth/taskUpdate`, {
+    const response =  await axios.put(`${API_URL}/api/auth/taskUpdate`, {
         taskId: selectedTask.id, 
         updatedDate: localDate,
         updatedPriority,
@@ -243,6 +243,8 @@ const Task = () => {
           ? { ...task, end_date: localDate, priority: updatedPriority } 
           : task
       );
+
+      console.log(response, 'respuesta con la fecha al actualizar')
       // Actualizamos ambos estados
       setSearchResults(updatedSearchResults);
       setTasks(updatedTasks);

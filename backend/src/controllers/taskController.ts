@@ -3,6 +3,7 @@ import { pool } from '../index';  // Importa la conexión desde index.ts
 
 export const createTask = async (req: Request, res: Response): Promise<Response> => {
   const { task, startDate, endDate, category, priority } = req.body;
+  console.log(startDate, endDate, 'datos de fechas que necesitamos...')
 
   // Verificar si el usuario está autenticado
   const user = (req as any).user;
@@ -17,7 +18,7 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
     day: '2-digit',
   }).split('/').reverse().join('-');
   
-
+  console.log(today, 'hora colombiana')
 
   // validamos el nombre de la tarea
   if (task.length > 40) {
@@ -27,7 +28,6 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
     });
   }
   
-
   // Validaciones de entrada para asegurarse de que los campos sean correctos
   if (!task || task.trim() === '') {
     console.log('Datos incompletos - task_name:', task);

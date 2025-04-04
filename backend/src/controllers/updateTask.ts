@@ -11,6 +11,7 @@ export const updateTask = async (req: Request, res: Response): Promise<Response>
      }
 
     const {updatedDate, updatedPriority } = req.body;
+    console.log(updatedDate, 'fecha que necesitamos para actualizar');
     const taskId = Number(req.body.taskId);
     const formattedUpdatedDate = new Date(updatedDate).toISOString().split('T')[0];
 
@@ -22,7 +23,12 @@ export const updateTask = async (req: Request, res: Response): Promise<Response>
     }
 
     // Validación de fecha
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toLocaleDateString('es-CO', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).split('/').reverse().join('-');    
+    console.log('fecha actual colombiana', today);
     if (formattedUpdatedDate < today) {
       return res.status(400).json({
         errors: { errorUpdate: 'Fecha de actualización pasada.' }
