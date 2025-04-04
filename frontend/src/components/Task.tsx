@@ -327,12 +327,11 @@ const Task = () => {
     
     console.log(endDate);
     // Convertimos las fechas al timezone de Colombia y las truncamos a medianoche
-    const now = new Date();
-    const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Bogota' }));
-    today.setHours(0, 0, 0, 0);
+    const today = new Date().toISOString().split('T')[0]; // Solo la parte de la fecha
+    const taskEnd = endDate.split('T')[0];
   
-    const taskEnd = new Date(endDate);
     console.log(today, 'fecha de hoy');
+    console.log(taskEnd, 'ultima fecha tarea')
 
     console.log(today, taskEnd, '← fechas truncadas Bogotá');
   
