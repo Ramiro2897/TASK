@@ -18,7 +18,7 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
     day: '2-digit',
   }).split('/').reverse().join('-');
   
-  console.log(today, 'hora colombiana')
+  console.log(today, 'hora colombiana');
 
   // validamos el nombre de la tarea
   if (task.length > 40) {
@@ -46,7 +46,7 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
   if (startDate < today) {
     console.log('Fecha de inicio en el pasado:', startDate);
     return res.status(400).json({
-      errors: { date: 'Fecha de inicio en el pasado.' }
+      errors: { date: 'Fecha de inicio en el pasado.', startDate, today }
     });
   }
 
