@@ -266,13 +266,12 @@ const Home = () => {
                     {/* Mostrar la fecha de creación de la tarea */}
                     <div className={styles['task-date']}>
                       <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                      {new Date(tareas[0].created_at)
-                        .toLocaleDateString('es-ES', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        })
-                        .replace(/ de /g, ' ')}
+                      {new Intl.DateTimeFormat('es-ES', {
+                        timeZone: 'UTC',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      }).format(new Date(tareas[0].created_at)).replace(/ de /g, ' ')}
                     </div>
                   </div>
                 ) : (
@@ -305,13 +304,12 @@ const Home = () => {
                       </div>
                       <span className={styles['task-date']}>
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(frases[0].created_at)
-                          .toLocaleDateString('es-ES', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })
-                          .replace(/ de /g, ' ')}
+                        {new Intl.DateTimeFormat('es-ES', {
+                          timeZone: 'UTC',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        }).format(new Date(frases[0].created_at)).replace(/ de /g, ' ')}
                       </span>
                     </div>
                   </div>
@@ -342,12 +340,13 @@ const Home = () => {
                     <p className={styles['task-date']}>
                       <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                       Termina el: {metas[0].start_date
-                        ? new Date(metas[0].end_date)
-                            .toLocaleDateString('es-ES', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            })
+                        ? new Intl.DateTimeFormat('es-ES', {
+                            timeZone: 'UTC',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })
+                            .format(new Date(metas[0].end_date))
                             .replace(/ de /g, ' ')
                         : 'Fecha no disponible'}
                     </p>
