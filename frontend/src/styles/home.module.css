@@ -47,6 +47,10 @@ body {
   align-items: center;
   margin-bottom: 20px;
   padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .header h1 {
@@ -145,6 +149,10 @@ body {
   border-radius: 5px;
   padding: 20px;
   text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .card h3{

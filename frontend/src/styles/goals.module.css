@@ -47,6 +47,10 @@ body{
   background-clip: text;
   color: transparent;
   font-weight: bold;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .goals-container .goals_header .options {
@@ -56,6 +60,10 @@ body{
   flex-wrap: wrap;
   gap: 10px; 
   padding: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .goals-container .goals_header .options .options_list {
@@ -305,6 +313,10 @@ body{
   white-space: normal;
   margin: 5px 0;
   transition: all 0.3s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .goal-completed {
@@ -597,6 +609,10 @@ body{
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .modalContent .goalName{
@@ -742,6 +758,10 @@ body{
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .modalContentPreview .goalName{

@@ -77,7 +77,7 @@ const Goals = () => {
           newElement.classList.add(styles["fadeIn"]);
         }
       }, 500);
-    }, 60000); 
+    }, 30000); 
   
     return () => {
       clearInterval(interval);
@@ -373,6 +373,12 @@ const Goals = () => {
       }
     }
   }, [selectedGoalPreview?.current_value]);
+
+  const formatDateWithoutTimezoneShift = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('T')[0].split('-');
+    const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    return `${parseInt(day)} ${meses[parseInt(month) - 1]} ${year}`;
+  }; 
   
   return (
     <div className={styles['goals-container']}>
@@ -561,21 +567,11 @@ const Goals = () => {
                     <div className={styles['content-date']}>
                       <p title="fecha de creación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(goal.start_date).toLocaleDateString('es-ES', {
-                          timeZone: 'America/Bogota',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).replace('.', '')}
+                        {formatDateWithoutTimezoneShift(goal.start_date)}
                       </p>
                       <p title="fecha de terminación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(goal.end_date).toLocaleDateString('es-ES', {
-                          timeZone: 'America/Bogota',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).replace('.', '')}
+                        {formatDateWithoutTimezoneShift(goal.end_date)}
                       </p>
                     </div>
                   </div>
@@ -625,21 +621,11 @@ const Goals = () => {
                     <div className={styles['content-date']}>
                       <p title="fecha de creación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'America/Bogota',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).format(new Date(goal.start_date)).replace('.', '')}
+                        {formatDateWithoutTimezoneShift(goal.start_date)}
                       </p>
                       <p title="fecha de terminación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'America/Bogota',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).format(new Date(goal.end_date)).replace('.', '')}
+                        {formatDateWithoutTimezoneShift(goal.end_date)}
                       </p>
                     </div>
                   </div>

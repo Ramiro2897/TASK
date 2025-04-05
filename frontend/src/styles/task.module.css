@@ -47,6 +47,10 @@ body{
   background-clip: text;
   color: transparent;
   font-weight: bold;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .task-container .task_header .options {
@@ -56,6 +60,10 @@ body{
   flex-wrap: wrap;
   gap: 10px; 
   padding: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .task-container .task_header .options .options_list {
@@ -246,6 +254,10 @@ body{
   background: #998d8d28;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .task-container .dashboard_task .task-item:hover{
@@ -439,6 +451,10 @@ body{
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .modalContent .taskTitle{

@@ -47,6 +47,10 @@ body{
   background-clip: text;
   color: transparent;
   font-weight: bold;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .phrases-container .phrases_header .options {
@@ -56,6 +60,10 @@ body{
   flex-wrap: wrap;
   gap: 10px; 
   padding: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .phrases-container .phrases_header .options .options_list {
@@ -396,6 +404,10 @@ body{
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .modalContent .phraseTitle{

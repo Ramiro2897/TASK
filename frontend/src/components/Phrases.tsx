@@ -278,11 +278,17 @@ const Phrases = () =>{
     setIsSearching(false); 
   };
 
-   // funcion para nevegar entre componentes
-   const navigate = useNavigate();
-   const handleNavigation = (path: string) => {
-     navigate(path);
-   };
+  // funcion para nevegar entre componentes
+  const navigate = useNavigate();
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  const formatDateWithoutTimezoneShift = (dateStr: string) => {
+   const [year, month, day] = dateStr.split('T')[0].split('-');
+   const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+   return `${parseInt(day)} ${meses[parseInt(month) - 1]} ${year}`;
+  };  
 
   return (
     <div className={styles['phrases-container']}>
@@ -416,14 +422,10 @@ const Phrases = () =>{
                   </div>
                   <div className={styles['phrase-date']}>
                     <div className={styles['content-date']}>
-                      <p title="fecha de creación">
-                        <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(phrase.created_at).toLocaleDateString('es-ES', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).replace('.', '')}
-                      </p>
+                    <p title="fecha de creación">
+                      <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
+                      {formatDateWithoutTimezoneShift(phrase.created_at)}
+                    </p>
                     </div>
                   </div>
                 </div>   
@@ -458,17 +460,12 @@ const Phrases = () =>{
                     <div className={styles['content-date']}>
                       <p title="fecha de creación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Date(phrase.created_at).toLocaleDateString('es-ES', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).replace('.', '')}
+                        {formatDateWithoutTimezoneShift(phrase.created_at)}
                       </p>
                     </div>
                   </div>
                 </div>   
             </div>
-
             ))}
       </div>
 
