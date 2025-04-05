@@ -13,17 +13,18 @@ exports.createTask = void 0;
 const index_1 = require("../index"); // Importa la conexión desde index.ts
 const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { task, startDate, endDate, category, priority } = req.body;
+    console.log(startDate, endDate, 'datos de fechas que necesitamos...');
     // Verificar si el usuario está autenticado
     const user = req.user;
     if (!user) {
         return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
     }
     // Obtener la fecha actual en formato YYYY-MM-DD
-    const today = new Date().toLocaleDateString('es-CO', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-    }).split('/').reverse().join('-');
+    const now = new Date().toLocaleString('en-US', { timeZone: 'America/Bogota' });
+    const today = new Date(now).getFullYear() + '-' +
+        String(new Date(now).getMonth() + 1).padStart(2, '0') + '-' +
+        String(new Date(now).getDate()).padStart(2, '0');
+    console.log(today, 'hora colombiana');
     // validamos el nombre de la tarea
     if (task.length > 40) {
         console.log('Nombre de la tarea demasiado largo:', task);
@@ -44,10 +45,12 @@ const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             errors: { date: 'Las fechas de inicio y fin son obligatorias.' }
         });
     }
+    console.log('🛑🛑🛑 DEBUG INICIO PASADO 🛑🛑🛑', { today, startDate });
     if (startDate < today) {
-        console.log('Fecha de inicio en el pasado:', startDate);
+        console.log('Fecha de inicio en el pasado xd:', today);
+        console.log('🛑🛑🛑 DEBUG INICIO PASADO 🛑🛑🛑', { today, startDate });
         return res.status(400).json({
-            errors: { date: 'Fecha de inicio en el pasado.' }
+            errors: { date: 'Fecha de inicio en el pasado cd.', startDate }
         });
     }
     if (endDate < startDate) {

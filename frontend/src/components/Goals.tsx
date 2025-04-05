@@ -56,10 +56,11 @@ const Goals = () => {
     navigate(path);
   };
   
-  if (!(window as any).phraseInterval) {
-    let index = 0;
-    (window as any).phraseInterval = setInterval(() => {
-      // Agregar clase de salida
+  useEffect(() => {
+    let index = Number(localStorage.getItem("currentPhraseIndex")) || 0;
+    setCurrentPhrase(phrases[index]);
+  
+    const interval = setInterval(() => {
       const phraseElement = document.querySelector(`.${styles["fadeIn"]}`);
       if (phraseElement) {
         phraseElement.classList.add(styles["fadeOut"]);
@@ -67,16 +68,21 @@ const Goals = () => {
   
       setTimeout(() => {
         index = (index + 1) % phrases.length;
-        setCurrentPhrase(phrases[index]); 
+        setCurrentPhrase(phrases[index]);
+        localStorage.setItem("currentPhraseIndex", index.toString());
   
-        // Remover clase de salida y agregar entrada
-        if (phraseElement) {
-          phraseElement.classList.remove(styles["fadeOut"]);
-          phraseElement.classList.add(styles["fadeIn"]);
+        const newElement = document.querySelector(`.${styles["fadeIn"]}`);
+        if (newElement) {
+          newElement.classList.remove(styles["fadeOut"]);
+          newElement.classList.add(styles["fadeIn"]);
         }
-      }, 500); 
-    }, 60000);
-  }
+      }, 500);
+    }, 60000); 
+  
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
   
   // obtener las metas del usuario
   useEffect(() => {    
@@ -556,6 +562,7 @@ const Goals = () => {
                       <p title="fecha de creación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Date(goal.start_date).toLocaleDateString('es-ES', {
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -564,6 +571,7 @@ const Goals = () => {
                       <p title="fecha de terminación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Date(goal.end_date).toLocaleDateString('es-ES', {
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -618,7 +626,7 @@ const Goals = () => {
                       <p title="fecha de creación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'UTC',
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -627,7 +635,7 @@ const Goals = () => {
                       <p title="fecha de terminación">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'UTC',
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -637,7 +645,6 @@ const Goals = () => {
                   </div>
                 </div>   
             </div>
-
             ))}
       </div>
     </div>

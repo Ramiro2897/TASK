@@ -23,7 +23,7 @@ const node_cron_1 = __importDefault(require("node-cron"));
 const taskArchiver_1 = __importDefault(require("./controllers/taskArchiver"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT || 5000;
+const port = Number(process.env.PORT) || 5000;
 // Configuración de middleware
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -61,7 +61,7 @@ app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../../frontend/dist/index.html'));
 });
 // Iniciar el servidor
-app.listen(3000, '0.0.0.0', () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`🏠 Accede a la ruta principal en: http://localhost:${port}/Home`);
     console.log('🚀 Servidor backend corriendo en http://0.0.0.0:3000');
 });

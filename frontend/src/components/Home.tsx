@@ -267,7 +267,7 @@ const Home = () => {
                     <div className={styles['task-date']}>
                       <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                       {new Intl.DateTimeFormat('es-ES', {
-                        timeZone: 'UTC',
+                        timeZone: 'America/Bogota',
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
@@ -305,7 +305,7 @@ const Home = () => {
                       <span className={styles['task-date']}>
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'UTC',
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -341,7 +341,7 @@ const Home = () => {
                       <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                       Termina el: {metas[0].start_date
                         ? new Intl.DateTimeFormat('es-ES', {
-                            timeZone: 'UTC',
+                            timeZone: 'America/Bogota',
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',

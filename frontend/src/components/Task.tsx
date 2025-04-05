@@ -320,17 +320,29 @@ const Task = () => {
     document.body.style.overflow = "auto";  
     document.body.style.pointerEvents = "auto"; 
   };
+
+  const getColombiaDate = () => {
+    const formatter = new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'America/Bogota',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    return formatter.format(new Date()); // esto da "2025-04-04"
+  };
+  
   
   // funcion para validar si la tarea esta vencida y sin completar
   const isTaskExpired = (endDate: string, isComplete: boolean): boolean => {
     if (isComplete) return false;
     // Convertimos las fechas al timezone de Colombia y las truncamos a medianoche
-    const today = new Date().toISOString().split('T')[0]; // Solo la fecha
+    const today = getColombiaDate();
     const taskEnd = endDate.split('T')[0];
+
+    console.log('fecha de hoy', today, 'y fecha tasend', taskEnd);
   
     return taskEnd < today;
   };  
-  
 
   return (
 
@@ -468,7 +480,7 @@ const Task = () => {
                       <p title="fecha de inicio">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'UTC',
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -477,7 +489,7 @@ const Task = () => {
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'UTC',
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -517,7 +529,7 @@ const Task = () => {
                       <p title="fecha de inicio">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'UTC',
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -526,7 +538,7 @@ const Task = () => {
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
                         {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'UTC',
+                          timeZone: 'America/Bogota',
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
@@ -541,8 +553,6 @@ const Task = () => {
       </div>
     </div>
   );
-  
- 
 };
 
 export default Task;

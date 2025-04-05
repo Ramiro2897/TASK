@@ -23,12 +23,25 @@ const Phrases = () =>{
   // permite asignarle el valor a selectedPhrase cuando se abre el modal de editar
   useEffect(() => {
     if (selectedPhrase) {
-      setNewDate(selectedPhrase.date ? selectedPhrase.date.split('T')[0] : ""); 
+      if (selectedPhrase.date) {
+        const date = new Date(selectedPhrase.date);
+  
+        // Convertimos la fecha a la zona horaria de Bogotá y luego al formato YYYY-MM-DD
+        const offsetDate = new Date(date.toLocaleString('en-US', { timeZone: 'America/Bogota' }));
+        const year = offsetDate.getFullYear();
+        const month = String(offsetDate.getMonth() + 1).padStart(2, '0');
+        const day = String(offsetDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+  
+        setNewDate(formattedDate);
+      } else {
+        setNewDate("");
+      }
+  
       setEditedName(selectedPhrase.name || "");
     }
   }, [selectedPhrase]);
   
-
   // datos globales del usuario para realizar cualquier accion
   const API_URL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("token");
