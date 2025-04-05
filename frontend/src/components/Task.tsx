@@ -343,6 +343,12 @@ const Task = () => {
     return taskEnd < today;
   };  
 
+  const formatDateWithoutTimezoneShift = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('T')[0].split('-');
+    const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    return `${parseInt(day)} ${meses[parseInt(month) - 1]} ${year}`;
+  };  
+
   return (
 
     <div className={styles['task-container']}> {/* Usar estilos del módulo */}
@@ -476,24 +482,14 @@ const Task = () => {
                   </div>
                   <div className={styles['task-date']}>
                     <div className={styles['content-date']}>
-                      <p title="fecha de inicio">
+                    <p title="fecha de inicio">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'America/Bogota',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).format(new Date(task.start_date)).replace('.', '')}
+                        {formatDateWithoutTimezoneShift(task.start_date)}
                       </p>
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'America/Bogota',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).format(new Date(task.end_date)).replace('.', '')}
-                      </p>
+                        {formatDateWithoutTimezoneShift(task.end_date)}
+                      </p>  
                     </div>
                   </div>
                 </div>   
@@ -527,24 +523,12 @@ const Task = () => {
                     <div className={styles['content-date']}>
                       <p title="fecha de inicio">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'America/Bogota',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).format(new Date(task.start_date)).replace('.', '')}
-                        <p>{task.start_date}</p>
+                        {formatDateWithoutTimezoneShift(task.start_date)}
                       </p>
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-                        {new Intl.DateTimeFormat('es-ES', {
-                          timeZone: 'America/Bogota',
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        }).format(new Date(task.end_date)).replace('.', '')}
-                        <p>{task.end_date}</p>
-                      </p>
+                        {formatDateWithoutTimezoneShift(task.end_date)}
+                      </p>                      
                     </div>
                   </div>
                 </div>   
