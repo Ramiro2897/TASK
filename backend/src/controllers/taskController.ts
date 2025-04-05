@@ -41,9 +41,11 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
       errors: { date: 'Las fechas de inicio y fin son obligatorias.' }
     });
   }
+  console.log('🛑🛑🛑 DEBUG INICIO PASADO 🛑🛑🛑', { today, startDate });
 
   if (startDate < today) {
     console.log('Fecha de inicio en el pasado xd:', today);
+    console.log('🛑🛑🛑 DEBUG INICIO PASADO 🛑🛑🛑', { today, startDate });
     return res.status(400).json({
       errors: { date: 'Fecha de inicio en el pasado cd.', startDate }
     });
