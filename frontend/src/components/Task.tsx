@@ -331,7 +331,6 @@ const Task = () => {
     return formatter.format(new Date()); // esto da "2025-04-04"
   };
   
-  
   // funcion para validar si la tarea esta vencida y sin completar
   const isTaskExpired = (endDate: string, isComplete: boolean): boolean => {
     if (isComplete) return false;
@@ -534,6 +533,7 @@ const Task = () => {
                           month: 'short',
                           day: 'numeric',
                         }).format(new Date(task.start_date)).replace('.', '')}
+                        <p>{task.start_date}</p>
                       </p>
                       <p title="fecha final">
                         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
@@ -543,6 +543,7 @@ const Task = () => {
                           month: 'short',
                           day: 'numeric',
                         }).format(new Date(task.end_date)).replace('.', '')}
+                        <p>{task.end_date}</p>
                       </p>
                     </div>
                   </div>
