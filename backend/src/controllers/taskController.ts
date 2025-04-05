@@ -12,12 +12,11 @@ export const createTask = async (req: Request, res: Response): Promise<Response>
   }
 
   // Obtener la fecha actual en formato YYYY-MM-DD
-  const today = new Date().toLocaleDateString('es-CO', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).split('/').reverse().join('-');
-  
+  const now = new Date().toLocaleString('en-US', { timeZone: 'America/Bogota' });
+  const today = new Date(now).getFullYear() + '-' +
+              String(new Date(now).getMonth() + 1).padStart(2, '0') + '-' +
+              String(new Date(now).getDate()).padStart(2, '0');
+
   console.log(today, 'hora colombiana');
 
   // validamos el nombre de la tarea
