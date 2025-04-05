@@ -18,8 +18,6 @@ const Task = () => {
   const [newDate, setNewDate] = useState("");
   const [priority, setPriority] = useState(selectedTask?.priority || "low");  // low por defecto si es null o undefined
 
-
-  console.log(tasks, 'objeto tareas');
   useEffect(() => {
     const token = localStorage.getItem("token");
   
@@ -52,7 +50,6 @@ const Task = () => {
           setErrors({ general: undefined });
         }
         setTasks(response.data);
-        console.log(response.data, 'datos al cargar las tareas...');
       } catch (error: any) {
         setErrors(error.response?.data.errors || { general: "Error inesperado. Comunícalo al programador." });
       }
@@ -223,7 +220,7 @@ const Task = () => {
     try {
       const API_URL = import.meta.env.VITE_API_URL;
   
-    const response =  await axios.put(`${API_URL}/api/auth/taskUpdate`, {
+       await axios.put(`${API_URL}/api/auth/taskUpdate`, {
         taskId: selectedTask.id, 
         updatedDate: localDate,
         updatedPriority,
@@ -247,7 +244,6 @@ const Task = () => {
           : task
       );
 
-      console.log(response, 'respuesta con la fecha al actualizar');
       // Actualizamos ambos estados
       setSearchResults(updatedSearchResults);
       setTasks(updatedTasks);

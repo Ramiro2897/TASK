@@ -46,7 +46,6 @@ const Login: React.FC = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('username', response.data.user.username);
 
-      console.log('Login exitoso:', response.data);
       setMessage('Inicio de sesión exitoso. Redirigiendo...');
 
       // Redirigir a la página de inicio
