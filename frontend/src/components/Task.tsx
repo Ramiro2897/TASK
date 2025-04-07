@@ -414,8 +414,8 @@ const Task = () => {
           <div className={styles['options_list']} onClick={() => handleNavigation("/Home")}>
             <FontAwesomeIcon icon={faArrowLeft} /> Ir Home
           </div>
-          <div className={styles['options_list']}>
-            <FontAwesomeIcon icon={faQuoteLeft} onClick={() => handleNavigation("/phrases")} /> Frases
+          <div className={styles['options_list']} onClick={() => handleNavigation("/phrases")}>
+            <FontAwesomeIcon icon={faQuoteLeft}  /> Frases
           </div>
           <div className={styles['options_list']} onClick={() => handleNavigation("/goals")}>
             <FontAwesomeIcon icon={faBullseye} /> Metas
