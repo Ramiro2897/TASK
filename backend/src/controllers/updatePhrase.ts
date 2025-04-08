@@ -22,8 +22,19 @@ export const updatePhrase = async (req: Request, res: Response): Promise<Respons
     }
 
     // 🔹 Validación de fecha (convertimos `updatedDate` al mismo formato para evitar errores)
-    const today = new Date().toISOString().split('T')[0];
+    const date = new Date();
+    const today = new Intl.DateTimeFormat('es-CO', {
+      timeZone: 'America/Bogota',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(date).split('/').reverse().join('-');
+
+    
+    console.log('fecha actual colombiana', today);
+
     const formattedDate = new Date(updatedDate).toISOString().split('T')[0];
+    console.log(formattedDate, 'fecha formateada...')
 
     if (formattedDate < today) {
       return res.status(400).json({

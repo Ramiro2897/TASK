@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 
-
 const Phrases = () =>{ 
   const [phrases, setPhrases] = useState<{ id: number; phrase: string; author: string; user_id: number; created_at: string; favorite: boolean;}[]>([]);
   const [searchResults, setSearchResults] = useState<{ id: number; phrase: string; author: string; user_id: number; created_at: string; favorite: boolean;}[]>([]);
