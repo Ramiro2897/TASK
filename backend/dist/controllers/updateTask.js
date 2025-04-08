@@ -30,11 +30,13 @@ const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         // Validación de fecha
-        const today = new Date().toLocaleDateString('es-CO', {
+        const date = new Date();
+        const today = new Intl.DateTimeFormat('es-CO', {
+            timeZone: 'America/Bogota',
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
-        }).split('/').reverse().join('-');
+        }).format(date).split('/').reverse().join('-');
         console.log('fecha actual colombiana', today);
         if (formattedUpdatedDate < today) {
             return res.status(400).json({
