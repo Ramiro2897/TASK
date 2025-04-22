@@ -731,6 +731,7 @@ body{
 /* ----------------modal para agregar avance de una meta----------- */
 .modalOverlayPreview {
   position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -739,7 +740,7 @@ body{
   justify-content: center;
   z-index: 10000;
   pointer-events: auto;
-  background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  background: rgba(0, 0, 0, 0.5); 
   backdrop-filter: blur(0.2px);
 }
 .modalContentPreview {
