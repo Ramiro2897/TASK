@@ -18,6 +18,21 @@ body {
   overflow-y: auto;
 }
 
+ /* estrellas */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: transparent url("https://www.transparenttextures.com/patterns/stardust.png") repeat;
+    z-index: -1;
+    animation: stars 6000s linear infinite;
+  }
+
+   @keyframes stars {
+    from { background-position: 0 0; }
+    to   { background-position: 10000px 5000px; }
+  }
+
 /* Crea un fondo estrellado estático */
 /* body::before {
   content: "";
@@ -54,17 +69,59 @@ body {
 }
 
 .header h1 {
+  width: 100%;
   padding: 20px 0;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin: 0 30px 0px 0px;
+}
+
+.messageContainer {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  background: #0d0d0d1c;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  padding: 10px 10px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.closing {
+  opacity: 0;
+  transform: translateY(-20px); /* sube y desaparece suavemente */
+}
+
+.header .welcomeTextContainer p {
+  padding: 10px 2px;
+  font-family: 'Inter', 'Poppins', 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(14px, 1vw, 18px);
+  font-weight: 200;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+  color: #f0f0f283;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.taskCount {
+  font-weight: 300;     
+  color: #F0F0F2;        
+  background: #456E73;
+  padding: 2px 6px;
+  border-radius: 50%;
 }
 
 .username {
   position: relative;
   display: inline-block;
   font-weight: bold;
-  font-size: 1.5rem;
-  background: linear-gradient(to bottom, #8AA6A3, #034159);
+  font-size: 1.2rem;
+  background: linear-gradient(to bottom, #9CC8D9, #326A8C);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -75,7 +132,7 @@ body {
   content: '';
   position: absolute;
   border-radius: 50%;
-  background: #034159;
+  background: #456E73;
   animation: sparkle 1s infinite ease-in-out;
   pointer-events: none;
 }
@@ -116,20 +173,6 @@ body {
   }
 }
 
-.header-buttons button {
-  background-color: #034159;
-  color: #fff;
-  border: none;
-  padding: 10px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.header-buttons button:hover {
-  background-color: #025951;
-}
-
 /* Estilos de las tarjetas */
 .dashboard {
   display: flex;
@@ -143,9 +186,9 @@ body {
 .card {
   max-width: 350px;
   min-width: 280px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #0d0d0d1c;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
   border-radius: 5px;
   padding: 20px;
   text-align: center;
@@ -165,7 +208,7 @@ body {
   min-height: 100px;
   padding: 10px; /* Más padding para mejor espaciado */
   border-radius: 5px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.014);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -174,7 +217,7 @@ body {
 }
 
 .empty-text {
-  color: #ccc;
+  color: #F0F0F2;
   font-style: italic;
   margin: 10px 0; 
   text-align: center;
@@ -184,7 +227,7 @@ body {
 /* Estilos para tareas, frases y metas en el home */
 .task-text {
   width: 100%;
-  color: #ccc;
+  color: #F0F0F2;
   font-size: 0.8rem;
   font-family: Arial, Helvetica, sans-serif;
   margin: 10px 0;
@@ -219,7 +262,7 @@ body {
 }
 
 .title-name {
-  color: #ccc;
+  color: #F0F0F2;
   font-size: .9rem;
   font-weight: bold;
   text-transform: none; 
@@ -239,7 +282,7 @@ body {
 }
 
 .card-notification.closing {
-  animation: slideUp 0.5s ease-in forwards; /* Animación de deslizamiento hacia arriba */
+  animation: slideUp 0.5s ease-in forwards; 
 }
 
 @keyframes slideUp {
@@ -258,17 +301,17 @@ body {
 }
 
 .complete-status {
-  color: #fff;
+  color:#F0F0F2;
   padding: 4px 10px;
-  background-color: #04D939;
+  background-color: #D99E6A;
   border-radius: 2px;
   margin-top: 8px;
 }
 
 .incomplete-status {
-  color: #ccc;
+  color: #F0F0F2;
   padding: 4px 10px;
-  background-color: #58929c;
+  background-color: #456E73;
   border-radius: 2px;
   margin-top: 8px;
 }
@@ -278,10 +321,9 @@ body {
   padding: 3px 0px;
   font-size: 0.8rem;
   font-weight: 100;
-  color: #ccc;
+  color: #F0F0F2;
 }
 /* ------------- tareas diarias -------------- */
-
 .author-info{
   width: 100%;
   display: flex;
@@ -289,7 +331,6 @@ body {
   padding: 2px 0px;
   margin-top: 0px;
   font-size: 1rem;
-  color: #40914b;
 }
 
 .content-author{
@@ -299,14 +340,14 @@ body {
   margin-top: px;
   font-size: 0.8rem;
   font-weight: 100;
-  color: #ccc;
+  color: #F0F0F2;
 }
 
 .author{
-  color: #ccc;
+  color: #F0F0F2;
   padding: 1px 10px;
   border-radius: 10px;
-  border: 1px solid rgba(141, 135, 135, 0.3);
+  border: 1px solid #bdbfbf21;
 }
 
 .favorite-icon {
@@ -316,13 +357,13 @@ body {
 
 /* Corazón favorito (rojo) con animación de latido */
 .favorite-icon.favorite {
-  color: #ff6b6b;
+  color: #BF2011;
   animation: heartbeat 10s infinite alternate;
 }
 
 /* Corazón no favorito (gris) */
 .favorite-icon.not-favorite {
-  color: #ccc;
+  color: #F0F0F2;
 }
 
 /* Animación de latido */
@@ -337,19 +378,19 @@ body {
   display: inline-block; /* Se ajusta al contenido */
   min-width: 30%; 
   max-width: 100%; 
-  color: #ccc;
+  color: #F0F0F2;
   padding: 1px 10px;
   border-radius: 2px;
-  border: 1px solid rgba(141, 135, 135, 0.3);
+  border: 1px solid #bdbfbf21;
   margin-top: 4px;
-  background-color: #58929c;
+  background-color: #456E73;
   word-wrap: break-word; /* Evita que el texto desborde */
 }
 
 
 /* Botón de agregar */
 .add-button {
-  background-color: #034159;
+  background-color: #326A8C;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -371,7 +412,7 @@ body {
 }
 
 .add-button:hover {
-  background-color: #025951; /* Color al hacer hover */
+  background-color: #32698cab;
   transform: scale(1.05);
 }
 
@@ -406,67 +447,122 @@ body {
 }
 
 /* ------------notificacion de tareas pendientes-------- */
-.card-notification{
+.card-notification {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 10px;
-  min-width: max-content;
-  height: auto;
+
+  width: auto;
+  max-width: 420px;  
+
   display: flex;
   justify-content: center;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.1);
+  background: #0d0d0d13;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   padding: 2px;
+  border: 1px solid #bdbfbf21;
+}
+
+/* SOLO MÓVIL */
+@media (max-width: 768px) {
+  .card-notification {
+    min-width: 90vw; /* móvil ancho */
+  }
+
+  .header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  }
+}
+
+
+/* ENTRADA */
+.slide-down {
   animation: slideDown 0.5s ease-out forwards;
-  border: 2px solid rgba(134, 79, 79, 0.15);
+}
+
+/* SALIDA */
+.slide-up {
+  animation: slideUp 0.5s ease-in forwards;
 }
 
 @keyframes slideDown {
-  0% {
-    top: -100px; /* Comienza fuera de la pantalla, hacia arriba */
+  from {
+    top: -100px;
+    opacity: 0;
   }
-  100% {
-    top: 20px; /* Termina en la posición donde está en tu CSS */
+  to {
+    top: 20px;
+    opacity: 1;
   }
 }
 
+@keyframes slideUp {
+  from {
+    top: 20px;
+    opacity: 1;
+  }
+  to {
+    top: -100px;
+    opacity: 0;
+  }
+}
+
+
 .icon{
-  width: 50px;
+  width: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(45deg, rgba(59, 57, 57, 0.1), rgba(44, 44, 44, 0.2), rgba(59, 57, 57, 0.7)); /* Fondo con degradado */
+  background: linear-gradient(45deg, rgba(59, 57, 57, 0.007), rgba(44, 44, 44, 0.034), rgba(59, 57, 57, 0.253)); /* Fondo con degradado */
   border-radius: 10px;
+  font-size: 2rem;
 }
 
 .message-text {
   padding: 5px 14px;
   font-size: 0.8rem;
   font-weight: 500;
-  color: #ccc;
+  color: #F0F0F2;
 }
 
 .sub-text {
   padding: 5px 14px;
   font-size: 0.8rem;
   font-weight: 100;
-  color: #fff;
+  color: #F0F0F2;
+  max-width: 320px;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .alert-icon{
   padding: 4px;
   border-radius: 5px;
-  color: #ff6b6b;
+  color: #F0F0F2;
 }
 
 .footer{
   width: 100%;
   height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  gap: 10px;
   margin-top: 20px;
   font-size: .7rem;
   font-weight: 600;
@@ -480,9 +576,23 @@ body {
   height: 25px;
   border-radius: 50%;
   padding: 4px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #bdbfbf21;
   cursor: pointer;
   margin-left: 5px;
+}
+
+.btn-buttons button {
+  background-color: #326A8C;
+  color: #F0F0F2;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.header-buttons button:hover {
+  background-color: #32698cab;
 }
 
 /* estilos responsivos */

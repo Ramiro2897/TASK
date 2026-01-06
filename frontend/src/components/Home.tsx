@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useEffect } from "react";
 import styles from '../styles/home.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faSadTear, faPlus, faHeartCircleBolt, faClock, faQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt, faPlus, faHeartCircleBolt, faClock, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import ModalTask from '../components/ModalTask';  
 import Modalphrases from '../components/Modalphrases'; 
 import ModalGoals from '../components/ModalGoals'; 
@@ -60,6 +60,7 @@ const Home = () => {
 
   // obtenemos el momento del dia para saber en que momento cambiar el esta de: taskNotified para que pueda notificar
   const [showAlert, setShowAlert] = useState(false);
+  const [closing, setClosing] = useState(false);
 
   useEffect(() => {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -76,8 +77,6 @@ const Home = () => {
         setFrases(frasesRes.data);
         setMetas(metasRes.data);
       
-        console.log(tareasRes.data, 'tareas del usuario');
-      
         // Manejo de notificación
         const latestTask = tareasRes.data[0];
         const currentDate = new Date();
@@ -90,7 +89,12 @@ const Home = () => {
           localStorage.setItem("taskNotified", "false");
         
           setTimeout(() => {
-            setShowAlert(false);
+            setClosing(true); // activa animación de salida
+
+            setTimeout(() => {
+              setShowAlert(false); // desmonta después de la animación
+              setClosing(false);
+            }, 500); // duración de la animación
           }, 30000);
         } else {
           setShowAlert(false); // Aseguramos que la alerta se oculte si no se cumple la condición
@@ -122,15 +126,12 @@ const Home = () => {
     }
 
     const lastNotifiedPeriod = localStorage.getItem("lastNotifiedPeriod");
-    console.log(lastNotifiedPeriod, 'último periodo notificado');
 
     if (lastNotifiedPeriod !== currentPeriod) {
-      console.log('🚀 Se activará la notificación');
       localStorage.setItem("taskNotified", "true");
       localStorage.setItem("lastNotifiedPeriod", currentPeriod);
     }
   }, []);
-
 
    // Función para actualizar la tarea en tiempo real
    const handleTaskAdded = (newTask: { message: string; task: { id: number; task_name: string; complete: boolean; created_at: string } }) => {
@@ -205,18 +206,111 @@ const Home = () => {
     navigate("/goals");
   }
 
+  // horas para notificar: buenos dias, tardes o noche
+  const getDayMoment = () => {
+  const hour = new Date().getHours();
+
+  if (hour >= 6 && hour < 12) return 'morning';
+  if (hour >= 12 && hour < 20) return 'afternoon';
+  return 'night';
+ };
+
+  const getGreeting = () => {
+   const moment = getDayMoment();
+
+   if (moment === 'morning') return 'Buenos días';
+   if (moment === 'afternoon') return 'Buenas tardes';
+   return 'Buenas noches';
+   };
+
+   // icono por si es de dia, tarde o noche
+   const getGreetingIcon = () => {
+   const moment = getDayMoment();
+
+   if (moment === 'morning') return '☀️';
+   if (moment === 'afternoon') return '🌤️';
+   return '🌙';
+  };
+
+  // llamados de una api para traer frases motivadoras y mostrarlas en tareas pendientes
+  const [motivation, setMotivation] = useState('');
+  const pendingTaskMessages = [
+  'Empieza por la tarea más fácil 💡',
+  'Haz solo una. El resto vendrá solo ⚡',
+  'Una tarea ahora vale más que motivación después 🔥',
+  'No rompas la cadena hoy 💪',
+  'Pequeños pasos, grandes resultados 🌱',
+  'Completar una cambia el resto del día 🚀',
+  'Hazla aunque no tengas ganas'
+  ];
+
+  useEffect(() => {
+    const randomIndex = Math.floor(
+      Math.random() * pendingTaskMessages.length
+    );
+
+    setMotivation(pendingTaskMessages[randomIndex]);
+  }, []);
+
+  const totalTasks = tareas.length;
+  const completedTasks = tareas.filter(t => t.complete).length;
+  const pendingTasks = totalTasks - completedTasks;
+  
+  const getContextMessage = () => {
+  const moment = getDayMoment();
+
+  // 🌅 MAÑANA
+  if (moment === 'morning') {
+    if (totalTasks === 0) {
+      return 'Empieza el día creando una tarea o una meta.';
+    }
+
+    return 'Elige una tarea importante y empieza con calma.';
+  }
+
+  // 🌇 TARDE
+  if (moment === 'afternoon') {
+    if (totalTasks === 0) {
+      return 'Aún no has creado tareas hoy. ¿Quieres empezar ahora?';
+    }
+
+     if (pendingTasks > 0) {
+      return (
+        <>
+          Tienes <span className={styles.taskCount}>{pendingTasks}</span> tareas pendientes. Aún hay tiempo.
+        </>
+      );
+    }
+
+    return 'Buen trabajo hoy, ya completaste todas tus tareas 👏';
+  }
+
+  // 🌙 NOCHE
+  if (totalTasks === 0) {
+    return 'Hoy fue un día tranquilo. Mañana puedes empezar de nuevo.';
+  }
+
+  if (pendingTasks > 0) {
+    return 'Hiciste lo que pudiste hoy. Mañana continúas.';
+  }
+
+  return 'Excelente trabajo hoy. Descansa, te lo ganaste 🌙';
+  };
+
 
   return (
     <div className={styles['home-container']}>
       {/* mostrar que tiene tareas pendientes */}
-      {showAlert && (
-        <div className={styles['card-notification']}>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon={faSadTear} className={styles['alert-icon']} />
-          </div>
+      { showAlert && (
+        <div
+          className={`${styles['card-notification']} ${
+            closing ? styles['slide-up'] : styles['slide-down']
+          }`}
+        >
+          <div className={styles.icon}>🫠</div>
           <div className={styles['modal-content-notification']}>
             <p className={styles['message-text']}>Tareas pendientes</p>
-            <p className={styles['sub-text']}>Tienes tareas que debes completar</p>
+            <p className={styles['sub-text']}>{motivation}</p>
           </div>
         </div>
       )}
@@ -230,14 +324,17 @@ const Home = () => {
       {username ? (
         <>
           <div className={styles.header}>
-            <h1 className={styles['welcome-text']}>
-              Bienvenido, <span className={styles.username}>{username}</span> <span className={styles.wave}>👋</span>
-            </h1>
-            <div className={styles['header-buttons']}>
-              <button onClick={handleLogout} className={styles['logout-button']} title="Cerrar sesión">
-                <FontAwesomeIcon icon={faSignOutAlt} />
-              </button>
-            </div>
+            <div className={styles.welcomeTextContainer}>
+              <h1 className={styles['welcome-text']}>
+                {getGreeting()}, <span className={styles.username}>{username}</span>{' '}
+                <span className={styles.wave}>{getGreetingIcon()}</span>
+              </h1>
+              <div className={`${styles.messageContainer}`}>
+                <p className={styles.contextMessage}>
+                  {getContextMessage()}
+                </p>
+              </div>
+            </div>         
           </div>
   
           <div className={styles.dashboard}>
@@ -366,6 +463,11 @@ const Home = () => {
           <footer className={styles['footer']}>
             <p>© TASLY - Created by Ramiro {currentYear} <span className={styles['span']} title='información' 
             onClick={handleGoInformation}><FontAwesomeIcon icon={faQuestion} /></span></p>
+            <div className={styles['btn-buttons']}>
+              <button onClick={handleLogout} className={styles['logout-button']} title="Cerrar sesión">
+                <FontAwesomeIcon icon={faSignOutAlt} />
+              </button>
+            </div>
           </footer>
         </>
       ) : (
