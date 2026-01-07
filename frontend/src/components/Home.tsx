@@ -83,7 +83,11 @@ const Home = () => {
           axios.get(`${API_URL}/api/auth/goallist`, { headers: { Authorization: `Bearer ${token}` } }),
         ]);
         setTareas(tareasRes.data);
-        setTaskSummary(tareasLengthRes.data);
+        setTaskSummary({
+          total: tareasLengthRes.data?.total ?? 0,
+          pending: tareasLengthRes.data?.pending ?? 0,
+          completed: tareasLengthRes.data?.completed ?? 0,
+        });
         setFrases(frasesRes.data);
         setMetas(metasRes.data);
       
