@@ -90,6 +90,8 @@ const Home = () => {
         });
         setFrases(frasesRes.data);
         setMetas(metasRes.data);
+        console.log('RESPONSE BACKEND →', tareasLengthRes.data);
+
       
         // Manejo de notificación
         const latestTask = tareasRes.data[0];
