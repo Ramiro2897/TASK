@@ -284,6 +284,7 @@ const Home = () => {
   // 🌇 TARDE
   if (moment === 'afternoon') {
     if (total === 0) {
+      console.log('perece que entró acá', total)
       return 'Aún no has creado tareas hoy. ¿Quieres empezar ahora?';
     }
 
