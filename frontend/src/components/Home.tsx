@@ -155,6 +155,7 @@ const Home = () => {
 
   // actualiza el numero de tareas pendientes de usuario
   const handleTasksLengthUpdated = (newTask: { complete: boolean }) => {
+  console.log('paso cuando quiere actualizar');
   setTaskSummary(prev => ({
     total: prev.total + 1,
     pending: newTask.complete ? prev.pending : prev.pending + 1,
@@ -274,6 +275,8 @@ const Home = () => {
   
   const getContextMessage = () => {
   const { total, pending, completed } = taskSummary;
+  console.log('este es textSumary:', total, pending, completed )
+  console.log('objeto sumary completo', taskSummary)
   const moment = getDayMoment();
 
   // 🌅 MAÑANA
