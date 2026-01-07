@@ -6,7 +6,7 @@ import { verifyToken } from '../middleware/verifyToken';
 import { createTask } from '../controllers/taskController';
 import { createPhrase } from '../controllers/phrasesController';
 import { createGoal } from '../controllers/goalController';
-import { getTasks } from '../controllers/getTaskController';
+import { getTasks, getTasksLength } from '../controllers/getTaskController';
 import { getPhrases } from '../controllers/getPhrasesController';
 import { getGoals } from '../controllers/getGoalsController';
 import { getUserTasks } from '../controllers/getUserTaskController';
@@ -63,10 +63,16 @@ router.post('/goals', verifyToken, async (req, res) => {
   // await createPhrase(req, res);
 });
 
-// ruta para hacer la consulta a las tareas de dicho usuario
+// ruta para hacer la consulta de la ultima tarea de dicho usuario
 router.get('/tasklist', verifyToken, async (req, res) => {
   // console.log('entro aqui al hacer la consulta de las tareas...');
   await getTasks(req, res); 
+});
+
+// ruta para hacer la consulta de la longitud de tareas 
+router.get('/tasklistAll', verifyToken, async (req, res) => {
+  // console.log('entro aqui al hacer la consulta de las tareas...');
+  await getTasksLength(req, res); 
 });
 
 // ruta para hacer la consulta a las tareas de dicho usuario

@@ -103,7 +103,7 @@ body {
   font-weight: 200;
   line-height: 1.4;
   letter-spacing: 0.5px;
-  color: #f0f0f283;
+  color: #f0f0f2ee;
   width: fit-content;
   max-width: 100%;
 }
@@ -387,7 +387,6 @@ body {
   word-wrap: break-word; /* Evita que el texto desborde */
 }
 
-
 /* Botón de agregar */
 .add-button {
   background-color: #326A8C;
@@ -487,7 +486,6 @@ body {
   -ms-user-select: none;
   }
 }
-
 
 /* ENTRADA */
 .slide-down {
@@ -591,7 +589,7 @@ body {
   transition: 0.3s;
 }
 
-.header-buttons button:hover {
+.btn-buttons button:hover {
   background-color: #32698cab;
 }
 

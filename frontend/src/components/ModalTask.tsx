@@ -8,9 +8,10 @@ interface ModalTaskProps {
   onClose: () => void;
   onSubmit: (taskData: { task: string; startDate: string; endDate: string; category: string; priority: string }) => void;
   onTaskAdded: (taskData: any) => void;
+  onTasksLengthUpdated: (newTask: { complete: boolean }) => void;
 }
 
-const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit, onTaskAdded }) => {
+const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit, onTaskAdded, onTasksLengthUpdated }) => {
   const [task, setTask] = useState(""); // Nombre de la tarea
   const [startDate, setStartDate] = useState(""); // Fecha de inicio
   const [endDate, setEndDate] = useState(""); // Fecha de finalización
@@ -46,6 +47,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({ isOpen, onClose, onSubmit, onTask
         // Llamar a la función onSubmit para que el padre reciba los datos
         onSubmit(taskData);
         onTaskAdded(response.data);
+        onTasksLengthUpdated(response.data);
 
         // Limpiar los campos después de enviar
         setTask("");

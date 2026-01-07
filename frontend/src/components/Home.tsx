@@ -62,18 +62,21 @@ const Home = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [closing, setClosing] = useState(false);
 
+  // longitud de tareas
+  const [tareasLength, setTareasLength] = useState(0);
   useEffect(() => {
     const API_URL = import.meta.env.VITE_API_URL;
   
     const fetchData = async () => {
       try {
-        const [tareasRes, frasesRes, metasRes] = await Promise.all([
+        const [tareasRes, tareasLengthRes, frasesRes, metasRes] = await Promise.all([
           axios.get(`${API_URL}/api/auth/tasklist`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_URL}/api/auth/tasklistAll`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${API_URL}/api/auth/phraseslist`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${API_URL}/api/auth/goallist`, { headers: { Authorization: `Bearer ${token}` } }),
         ]);
-      
         setTareas(tareasRes.data);
+        setTareasLength(tareasLengthRes.data.total);
         setFrases(frasesRes.data);
         setMetas(metasRes.data);
       
@@ -115,13 +118,10 @@ const Home = () => {
     let currentPeriod = '';
 
     if (hours >= 0 && hours < 8) {
-      console.log('Periodo: morning');
       currentPeriod = 'morning';
     } else if (hours >= 8 && hours < 18) {
-      console.log('Periodo: afternoon');
       currentPeriod = 'afternoon';
     } else {
-      console.log('Periodo: night');
       currentPeriod = 'night';
     }
 
@@ -140,6 +140,13 @@ const Home = () => {
     setTareas(() => {
       return [task]; // Actualizamos el estado con la nueva tarea
     });
+  };
+
+  // actualiza el numero de tareas pendientes de usuario
+  const handleTasksLengthUpdated = (newTask: { complete: boolean }) => {
+    if (!newTask.complete) {
+      setTareasLength(prev => prev + 1); // aumenta 1 si la tarea es pendiente
+    }
   };
 
   // funcion para actualizar la frase en tiempo real
@@ -252,11 +259,12 @@ const Home = () => {
     setMotivation(pendingTaskMessages[randomIndex]);
   }, []);
 
-  const totalTasks = tareas.length;
-  const completedTasks = tareas.filter(t => t.complete).length;
-  const pendingTasks = totalTasks - completedTasks;
+  console.log('Tareas actuales:', tareas);
+  // console.log('Pending:', tareas.filter(t => !t.complete).length);
   
   const getContextMessage = () => {
+  const totalTasks = tareas.length;
+  const pendingTasks = tareas.filter(t => !t.complete).length;
   const moment = getDayMoment();
 
   // 🌅 MAÑANA
@@ -277,7 +285,7 @@ const Home = () => {
      if (pendingTasks > 0) {
       return (
         <>
-          Tienes <span className={styles.taskCount}>{pendingTasks}</span> tareas pendientes. Aún hay tiempo.
+          Tienes <span className={styles.taskCount}>{tareasLength}</span> tareas pendientes. Aún hay tiempo.
         </>
       );
     }
@@ -480,6 +488,7 @@ const Home = () => {
         onClose={closeModal}
         onSubmit={() => {}}
         onTaskAdded={handleTaskAdded}
+        onTasksLengthUpdated={handleTasksLengthUpdated} 
       />
   
       <Modalphrases

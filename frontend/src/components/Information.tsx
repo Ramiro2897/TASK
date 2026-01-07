@@ -3,7 +3,7 @@ import styles from '../styles/info.module.css';
 const Information = () => {
   return (
     <div className={styles['home-container']}>
-      <h2>Tasly <span className={styles['version']}>v1.0.0</span></h2>
+      <h2>Tasly <span className={styles['version']}>v1.1.0</span></h2>
       <div className={styles['info-section']}>
         <h2>¿Qué es Tasly? </h2>
         <p>

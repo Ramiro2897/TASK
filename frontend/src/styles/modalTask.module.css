@@ -5,7 +5,7 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5); 
-  backdrop-filter: blur(5px); 
+  backdrop-filter: blur(4px); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,14 +13,14 @@
 }
 
 .modal-content {
-  background: rgba(27, 51, 77, 0.137);
+  background: #0d0d0d44;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.664);
   padding: 25px;
   border-radius: 5px; 
   max-width: 400px;
   width: 90%;
   text-align: center;
-  color: #f2f2f2;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  color: #F0F0F2;        
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
   overflow: hidden;
@@ -34,11 +34,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 10%) 0 0;
+  background: radial-gradient(circle, #32698cad 10%, transparent 10%) 0 0;
   background-size: 20px 20px;
   pointer-events: none;
-  z-index: 0; /* Ajustar para que no se oculte */
-  opacity: 0.5; /* Controla la visibilidad del efecto */
+  z-index: 0; 
+  opacity: 0.5; 
 }
 
 @keyframes fadeIn {
@@ -55,6 +55,8 @@
 .modal-content h2 {
   font-size: 1.1rem;
   margin-bottom: 20px;
+  border: 2px solid #f0f0f218;
+  border-radius: 5px; 
 }
 
 /* label para fechas de inicio y final */
@@ -64,8 +66,8 @@
 }
 
 .starDate label {
-  color: #757575;
-  font-size: .9rem;
+  color: #f0f0f2cb;
+  font-size: .8rem;
 }
 
 .modal-content input,
@@ -76,14 +78,14 @@
   border-radius: 5px; 
   border: none;
   background: rgba(50, 50, 50, 0.3);
-  color: #ccc; 
-  font-size: 1rem; 
+  color: #f0f0f2cb;
+  font-size: .9rem; 
   transition: border-color 0.3s;
 }
 
 .modal-content input::placeholder,
 .modal-content select {
-  color: #ccc;
+  color: #F0F0F2;
 }
 
 .modal-content input:focus,
@@ -94,8 +96,8 @@
 
 .modal-actions button:first-child {
   background-color: transparent; 
-  color: #ccc; 
-  border: 2px solid rgba(255, 255, 255, 0.20);
+  color: #F0F0F2; 
+  border: 1px solid #bdbfbf3f;
   border-radius: 5px;
   padding: 8px 20px;
   font-size: .9rem;
@@ -103,12 +105,12 @@
 }
 
 .modal-actions button:first-child:hover {
-  background-color: #025951; 
-  color: #ccc; 
+  background-color: #32698cab; 
+  color: #F0F0F2;  
 }
 .modal-content select {
   background: rgba(50, 50, 50, 0.4);
-  color: #ccc;
+  color: #F0F0F2; 
 }
 
 .modal-content select:focus {
@@ -117,11 +119,11 @@
 
 .modal-content select option {
   background: rgba(0, 0, 0, 0.7);
-  color: #ccc;
+  color: #F0F0F2; 
 }
 
 .modal-content select option:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #bdbfbf3f;
 }
 
 .modal-actions {
@@ -142,8 +144,8 @@
 
 .modal-actions button:last-child {
   background-color: transparent;
-  color: #ccc; 
-  border: 2px solid rgba(255, 255, 255, 0.20);
+  color: #F0F0F2; 
+  border: 1px solid #bdbfbf3f;
   border-radius: 5px;
   padding: 8px 20px;
   font-size: 1rem;
@@ -152,14 +154,14 @@
 }
 
 .modal-actions button:last-child:hover {
-  background-color: #998d8d28; 
-  color: #f2f2f2; 
+  background-color: #bdbfbf3f; 
+  color: #F0F0F2; 
 }
 
 /* modal de tarea guardada con exito */
 .success-message {
-  background-color: #04D939; 
-  color: #f2f2f2;
+  background-color: #326A8C; 
+  color: #F0F0F2;
   padding: 12px;
   margin-bottom: 10px;
   text-align: center;
@@ -173,8 +175,8 @@
 
 /* modal de un error para cuando se intenta crear una tarea */
 .error-message {
-  background-color: #ff6b6b; 
-  color: #f2f2f2;
+  background-color: #bf1f11d3; 
+  color: #F0F0F2;
   padding: 12px;
   border-radius: 6px;
   text-align: center;
@@ -214,7 +216,7 @@
 
 /* Estilo para errores específicos de la tarea */
 .errorTask {
-  color: #ff6b6b; 
+  color: #bf1f11d3; 
   font-size: 0.8rem;
   margin-top: 3px; 
   font-weight: bold; 

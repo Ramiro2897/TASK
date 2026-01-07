@@ -8,9 +8,6 @@
 .home-container {
   width: 100%;
   max-width: 800px;
-  background: rgba(0, 0, 0, 0.027); 
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   transition: all 0.3s ease-in-out; 
 }
@@ -18,7 +15,7 @@
 .home-container h2 {
   font-size: 1.5rem;
   font-weight: bold;
-  background: linear-gradient(to bottom, #8AA6A3, #034159);
+  background: linear-gradient(to bottom, #bdbfbfa4, #1b252623);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -28,7 +25,7 @@
 
 .version {
   font-size: 0.9rem;
-  color: #ccc;
+  color: #F0F0F2;        
 }
 
 .info-section {
@@ -37,15 +34,15 @@
 }
 
 .info-section h3 {
-  font-size: .9rem;
-  color: #F29F05;
+  font-size: .7rem;
+  color: #326A8C;
   margin-bottom: 8px;
 }
 
 .info-section p {
-  font-size: .9rem;
+  font-size: .8rem;
   line-height: 1.6;
-  color: #ccc;
+  color: #F0F0F2;
   text-align: justify;
 }
 
@@ -59,12 +56,12 @@
   padding: 15px;
   background: transparent;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #bdbfbf3f;
 }
 
 .contact h3, .details h3 {
-  font-size: 1.2rem;
-  background: linear-gradient(to bottom, #8AA6A3, #034159);
+  font-size: 1rem;
+  background: linear-gradient(to bottom, #F0F0F2, #326A8C);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -72,25 +69,25 @@
 
 .contact p, .details p {
   font-size: 0.8rem;
-  color: #ccc;
+  color: #F0F0F2;
   margin-top: 5px;
 }
 
 em {
   display: block;
-  font-size: 1rem;
-  color: #cccccc88;
+  font-size: .8rem;
+  color: #f0f0f2ad;
   text-align: center;
   margin-top: 15px;
 }
 
 em strong {
-  color: #f2f2f27a; 
+  color: #f0f0f2ad; 
   font-weight: bold;
 }
 
 em a {
-  color: #ffaa00; /* Color llamativo para el enlace */
+  color: #326A8C; /* Color llamativo para el enlace */
   text-decoration: none;
   font-weight: bold;
 }
