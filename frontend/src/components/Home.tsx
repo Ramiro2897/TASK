@@ -287,10 +287,8 @@ const Home = () => {
 
   // 🌇 TARDE
   if (moment === 'afternoon') {
-    if (total === 0) {
-      console.log('perece que entró acá', total)
-      console.log('render', { moment, total, pending });
-      return 'Aún no has creado tareas hoy. ¿Quieres empezar ahora?';
+    if (total === 0 && completed === 0) {
+        return 'Aún no has creado tareas hoy. ¿Quieres empezar ahora?';
     }
 
      if (pending > 0) {
@@ -300,7 +298,6 @@ const Home = () => {
         </>
       );
     }
-    console.log('render', { moment, total, pending });
     return 'Buen trabajo hoy, ya completaste todas tus tareas 👏';
   }
 
