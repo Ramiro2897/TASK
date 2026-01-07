@@ -69,7 +69,7 @@ const Home = () => {
   completed: 0,
   });
 
-  console.log(taskSummary, 'todo lo que quiero esta aqui');
+  // console.log(taskSummary, 'todo lo que quiero esta aqui');
 
   useEffect(() => {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -285,6 +285,7 @@ const Home = () => {
   if (moment === 'afternoon') {
     if (total === 0) {
       console.log('perece que entró acá', total)
+      console.log('render', { moment, total, pending });
       return 'Aún no has creado tareas hoy. ¿Quieres empezar ahora?';
     }
 
@@ -295,7 +296,7 @@ const Home = () => {
         </>
       );
     }
-
+    console.log('render', { moment, total, pending });
     return 'Buen trabajo hoy, ya completaste todas tus tareas 👏';
   }
 
