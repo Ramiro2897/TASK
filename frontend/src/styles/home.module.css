@@ -95,6 +95,10 @@ body {
   opacity: 0;
   transform: translateY(-20px); /* sube y desaparece suavemente */
 }
+.header .welcomeTextContainer {
+  position: relative;
+  overflow: hidden;
+}
 
 .header .welcomeTextContainer p {
   padding: 10px 2px;
@@ -106,6 +110,37 @@ body {
   color: #f0f0f2ee;
   width: fit-content;
   max-width: 100%;
+}
+.header .welcomeTextContainer p::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.08) 40%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.08) 60%,
+      transparent 80%
+    );
+
+  animation: welcomeGlow 6s ease-in-out infinite;
+  opacity: 0.9;
+}
+
+@keyframes welcomeGlow {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .taskCount {

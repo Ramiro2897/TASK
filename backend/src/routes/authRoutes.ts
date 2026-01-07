@@ -6,7 +6,7 @@ import { verifyToken } from '../middleware/verifyToken';
 import { createTask } from '../controllers/taskController';
 import { createPhrase } from '../controllers/phrasesController';
 import { createGoal } from '../controllers/goalController';
-import { getTasks, getTasksLength } from '../controllers/getTaskController';
+import { getTasks, getDailyTasksSummary } from '../controllers/getTaskController';
 import { getPhrases } from '../controllers/getPhrasesController';
 import { getGoals } from '../controllers/getGoalsController';
 import { getUserTasks } from '../controllers/getUserTaskController';
@@ -72,7 +72,7 @@ router.get('/tasklist', verifyToken, async (req, res) => {
 // ruta para hacer la consulta de la longitud de tareas 
 router.get('/tasklistAll', verifyToken, async (req, res) => {
   // console.log('entro aqui al hacer la consulta de las tareas...');
-  await getTasksLength(req, res); 
+  await getDailyTasksSummary(req, res); 
 });
 
 // ruta para hacer la consulta a las tareas de dicho usuario
@@ -166,8 +166,6 @@ router.put('/goalAdvance', verifyToken, async (req, res) => {
 router.put('/updateFavorite', verifyToken, async (req, res) => {
   await updatePhraseFavorite(req, res); 
 });
-
-
 
 export default router;
 

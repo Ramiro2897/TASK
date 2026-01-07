@@ -26,20 +26,21 @@ export const getTasks = async (req: Request, res: Response): Promise<Response> =
 };
 
 // longitud de tareas para mostrar
-export const getTasksLength = async (req: Request, res: Response): Promise<Response> => {
+export const getDailyTasksSummary = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user = (req as any).user;
     if (!user) {
       return res.status(401).json({ errors: { general: "Usuario no autenticado" } });
     }
 
-    // Solo contamos las tareas pendientes (complete = false)
     const result = await pool.query(
       `
-      SELECT COUNT(*) AS total
+      SELECT
+        COUNT(*) AS total,
+        COUNT(*) FILTER (WHERE complete = false) AS pending,
+        COUNT(*) FILTER (WHERE complete = true) AS completed
       FROM tasks
       WHERE user_id = $1
-        AND complete = false
         AND archived = false
         AND start_date <= CURRENT_DATE
         AND end_date >= CURRENT_DATE
@@ -47,14 +48,19 @@ export const getTasksLength = async (req: Request, res: Response): Promise<Respo
       [user.id]
     );
 
-    const pendingTasks = parseInt(result.rows[0].total, 10);
+    const summary = result.rows[0];
 
-    return res.status(200).json({ total: pendingTasks });
+    return res.status(200).json({
+      total: Number(summary.total),
+      pending: Number(summary.pending),
+      completed: Number(summary.completed),
+    });
   } catch (error) {
-    console.error('Error al obtener la longitud de tareas pendientes:', error);
+    console.error(error);
     return res.status(500).json({
-      errors: { server: 'Error al obtener la longitud de tareas pendientes.' }
+      errors: { server: 'Error al obtener el resumen diario.' }
     });
   }
 };
+
 

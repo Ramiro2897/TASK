@@ -63,7 +63,14 @@ const Home = () => {
   const [closing, setClosing] = useState(false);
 
   // longitud de tareas
-  const [tareasLength, setTareasLength] = useState(0);
+  const [taskSummary, setTaskSummary] = useState({
+  total: 0,
+  pending: 0,
+  completed: 0,
+  });
+
+  console.log(taskSummary, 'todo lo que quiero esta aqui');
+
   useEffect(() => {
     const API_URL = import.meta.env.VITE_API_URL;
   
@@ -76,7 +83,7 @@ const Home = () => {
           axios.get(`${API_URL}/api/auth/goallist`, { headers: { Authorization: `Bearer ${token}` } }),
         ]);
         setTareas(tareasRes.data);
-        setTareasLength(tareasLengthRes.data.total);
+        setTaskSummary(tareasLengthRes.data);
         setFrases(frasesRes.data);
         setMetas(metasRes.data);
       
@@ -144,9 +151,11 @@ const Home = () => {
 
   // actualiza el numero de tareas pendientes de usuario
   const handleTasksLengthUpdated = (newTask: { complete: boolean }) => {
-    if (!newTask.complete) {
-      setTareasLength(prev => prev + 1); // aumenta 1 si la tarea es pendiente
-    }
+  setTaskSummary(prev => ({
+    total: prev.total + 1,
+    pending: newTask.complete ? prev.pending : prev.pending + 1,
+    completed: prev.completed,
+  }));
   };
 
   // funcion para actualizar la frase en tiempo real
@@ -215,12 +224,12 @@ const Home = () => {
 
   // horas para notificar: buenos dias, tardes o noche
   const getDayMoment = () => {
-  const hour = new Date().getHours();
+    const hour = new Date().getHours();
 
-  if (hour >= 6 && hour < 12) return 'morning';
-  if (hour >= 12 && hour < 20) return 'afternoon';
-  return 'night';
- };
+    if (hour >= 6 && hour < 12) return 'morning';
+    if (hour >= 12 && hour < 20) return 'afternoon';
+    return 'night';
+  };
 
   const getGreeting = () => {
    const moment = getDayMoment();
@@ -236,7 +245,7 @@ const Home = () => {
 
    if (moment === 'morning') return '☀️';
    if (moment === 'afternoon') return '🌤️';
-   return '🌙';
+   return '🌚';
   };
 
   // llamados de una api para traer frases motivadoras y mostrarlas en tareas pendientes
@@ -258,18 +267,14 @@ const Home = () => {
 
     setMotivation(pendingTaskMessages[randomIndex]);
   }, []);
-
-  console.log('Tareas actuales:', tareas);
-  // console.log('Pending:', tareas.filter(t => !t.complete).length);
   
   const getContextMessage = () => {
-  const totalTasks = tareas.length;
-  const pendingTasks = tareas.filter(t => !t.complete).length;
+  const { total, pending, completed } = taskSummary;
   const moment = getDayMoment();
 
   // 🌅 MAÑANA
   if (moment === 'morning') {
-    if (totalTasks === 0) {
+    if (total === 0) {
       return 'Empieza el día creando una tarea o una meta.';
     }
 
@@ -278,14 +283,14 @@ const Home = () => {
 
   // 🌇 TARDE
   if (moment === 'afternoon') {
-    if (totalTasks === 0) {
+    if (total === 0) {
       return 'Aún no has creado tareas hoy. ¿Quieres empezar ahora?';
     }
 
-     if (pendingTasks > 0) {
+     if (pending > 0) {
       return (
         <>
-          Tienes <span className={styles.taskCount}>{tareasLength}</span> tareas pendientes. Aún hay tiempo.
+          Tienes <span className={styles.taskCount}>{pending}</span> tareas pendientes. Aún hay tiempo.
         </>
       );
     }
@@ -294,15 +299,33 @@ const Home = () => {
   }
 
   // 🌙 NOCHE
-  if (totalTasks === 0) {
+  if (total === 0) {
     return 'Hoy fue un día tranquilo. Mañana puedes empezar de nuevo.';
   }
 
-  if (pendingTasks > 0) {
-    return 'Hiciste lo que pudiste hoy. Mañana continúas.';
+  if (pending > 0) {
+  return (
+    <>
+      <p>
+        {completed > 0 ? (
+          <>
+            Completaste{' '}
+            <span className={styles.taskCount}>{completed}</span>{' '}
+            de{' '}
+            <span className={styles.taskCount}>{total}</span>{' '}
+            tareas 💪
+          </>
+        ) : (
+          <>
+            Hoy no se dio, mañana continúas 🌘
+          </>
+        )}
+      </p>
+    </>
+  );
   }
 
-  return 'Excelente trabajo hoy. Descansa, te lo ganaste 🌙';
+  return 'Excelente trabajo hoy. ¿Qué fue lo mejor que hiciste hoy?🌚';
   };
 
 
